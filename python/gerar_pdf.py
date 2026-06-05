@@ -130,7 +130,31 @@ def chart_ibc(df):
         fig.tight_layout()
         return fig_to_bytes(fig)
 
-# ── Gera narrativas diretamente dos dados (independe do .qmd) ────────────────
+# ── Extrai narrativas do .qmd (fonte primaria) ───────────────────────────────
+def extrair_narrativas(data_ref, val_selic=None):
+    qmd = os.path.join(BASE, f"boletim_{data_ref}.qmd")
+    if not os.path.exists(qmd):
+        return {}
+    with open(qmd, encoding="utf-8") as f:
+        txt = f.read()
+    secoes = {}
+    for m in re.finditer(r"### Análise\n\n(.*?)(?=\n###|\n```\{|\Z)", txt, re.DOTALL):
+        bloco = m.group(1).strip()
+        bloco = re.sub(r"\*\*(.*?)\*\*", r"\1", bloco)
+        bloco = re.sub(r"\*(.*?)\*",     r"\1", bloco)
+        secoes[len(secoes)] = bloco
+    if val_selic is not None and 2 in secoes:
+        paragrafos = secoes[2].split("\n\n")
+        if paragrafos:
+            paragrafos[0] = re.sub(
+                r"\d{1,2}[,\.]\d{2,6}%\s*(?:ao\s+ano|a\.a\.)",
+                f"{val_selic:.2f}% a.a.",
+                paragrafos[0], flags=re.IGNORECASE
+            )
+            secoes[2] = "\n\n".join(paragrafos)
+    return secoes
+
+# ── Gera narrativas diretamente dos dados (fallback sem .qmd) ─────────────────
 def gerar_narrativas(r, df_hist):
     """Gera os 3 paragrafos de analise de cada indicador a partir do resumo.csv."""
 
@@ -472,7 +496,18 @@ def main():
 
     val_selic  = float(df_res.loc[df_res["indicador"] == "Selic", "valor_atual"].iloc[0])
     r_idx      = df_res.set_index("indicador")
-    narrativas = gerar_narrativas(r_idx, df_hist)
+
+    # Tenta extrair narrativa do .qmd (fonte primaria — texto rico com acentuacao correta).
+    # Se o .qmd da data exata nao existir, busca o mais recente disponivel.
+    narrativas = extrair_narrativas(DATA_REF, val_selic=val_selic)
+    if not narrativas:
+        import glob
+        qmds = sorted(glob.glob(os.path.join(BASE, "boletim_*.qmd")))
+        if qmds:
+            data_alternativa = os.path.basename(qmds[-1]).replace("boletim_", "").replace(".qmd", "")
+            narrativas = extrair_narrativas(data_alternativa, val_selic=val_selic)
+    if not narrativas:
+        narrativas = gerar_narrativas(r_idx, df_hist)
 
     pdf = BoletimPDF()
     pdf.capa(DATA_REF)
