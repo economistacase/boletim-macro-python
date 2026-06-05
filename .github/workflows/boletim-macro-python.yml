@@ -57,9 +57,11 @@ jobs:
 
       - name: Commit e push dos produtos gerados
         run: |
-          # Adiciona os arquivos gerados pela rodada
+          # Copia o HTML gerado como index.html (URL fixa no GitHub Pages)
+          cp boletim_*.html index.html 2>/dev/null || true
+
           git add logs/revisao.md logs/erros.md 2>/dev/null || true
-          git add boletim_*.qmd boletim_*.html boletim_*.pdf 2>/dev/null || true
+          git add boletim_*.qmd boletim_*.html boletim_*.pdf index.html 2>/dev/null || true
 
           if git diff --staged --quiet; then
             echo "Nada a publicar nesta rodada."
