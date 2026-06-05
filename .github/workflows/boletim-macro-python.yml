@@ -78,3 +78,15 @@ jobs:
           name: logs-${{ github.run_id }}
           path: logs/
           retention-days: 30
+
+      - name: Notificar falha via GitHub Issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATA=$(date -u +%F)
+          gh issue create \
+            --title "Falha no Boletim Macro $DATA" \
+            --body "O workflow **${{ github.workflow }}** falhou na execução de $DATA. [Ver logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" \
+            --label "bug" 2>/dev/null || \
+          echo "Issue não criada (label 'bug' pode não existir). Verifique a aba Actions."

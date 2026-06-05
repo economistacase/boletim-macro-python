@@ -42,3 +42,6 @@ Se falha, liste os pontos específicos com linha e correção necessária.
 
 ## Limites
 Você não edita o arquivo `.qmd`. Apenas inspeciona e registra o log.
+
+Se o arquivo `.qmd` ou `resumo.csv` não existir, execute:
+`python python/registrar_erro.py "revisor_tecnico" "<descrição do erro>"` e retorne `falha`.

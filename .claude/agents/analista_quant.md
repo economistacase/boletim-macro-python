@@ -30,3 +30,6 @@ Exemplo exato: `df_resumo.to_csv('output/tabelas/resumo.csv', index=False, float
 
 ## Como proceder
 Crie/atualize `python/analise.py`, processe os dados com pandas seguindo estritamente as regras de cálculo e exportação acima, e registre o término. NUNCA invente dados.
+
+Se o script falhar, execute antes de encerrar:
+`python python/registrar_erro.py "analista_quant" "<descrição do erro>"`

@@ -1,10 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python:*)", 
+      "Bash(python:*)",
       "Bash(quarto:*)",
-      "Read(**)", 
-      "Write(**)", 
+      "Read(**)",
+      "Write(**)",
       "Edit(**)",
       "WebFetch"
     ],
@@ -13,9 +13,22 @@
       "Bash(gh:*)"
     ],
     "deny": [
-      "Bash(rm:*)", 
-      "Bash(sudo:*)", 
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
       "Bash(curl:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python python/hook_log.py"
+          }
+        ]
+      }
     ]
   }
 }

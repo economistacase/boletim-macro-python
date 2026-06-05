@@ -21,3 +21,6 @@ Leia `logs/revisao.md`. Se a primeira linha NÃO for exatamente `ok`, pare imedi
 
 ## Retorno
 Informe os caminhos completos dos dois arquivos gerados (`.html` e `.pdf`) e o tamanho de cada um.
+
+Se qualquer comando falhar, execute:
+`python python/registrar_erro.py "publicador" "<descrição do erro>"`
