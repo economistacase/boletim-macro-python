@@ -15,7 +15,21 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
+import matplotlib.dates as mdates
 from fpdf import FPDF
+
+MESES_PT_ABREV = ["jan","fev","mar","abr","mai","jun",
+                  "jul","ago","set","out","nov","dez"]
+MESES_PT_FULL  = ["janeiro","fevereiro","março","abril","maio","junho",
+                  "julho","agosto","setembro","outubro","novembro","dezembro"]
+
+def _fmt_mes_pt(x, pos):
+    """Formatter para eixo X: 'jun/25' em português."""
+    dt = mdates.num2date(x)
+    return f"{MESES_PT_ABREV[dt.month-1]}/{dt.strftime('%y')}"
+
+_locator_pt = mdates.MonthLocator(interval=6)
+_formatter_pt = mticker.FuncFormatter(_fmt_mes_pt)
 
 # ── Configuracao ─────────────────────────────────────────────────────────────
 DATA_REF = sys.argv[1] if len(sys.argv) > 1 else datetime.today().strftime("%Y-%m-%d")
@@ -75,8 +89,8 @@ def chart_ipca(df):
         ax.plot(sub["data"], sub["mm3"], color="#c53030", lw=1.5,
                 linestyle="--", label="Med. movel 3m")
         ax.set_title("IPCA — Variacao Mensal (%) | Ultimos 5 Anos")
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%b/%y"))
-        ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator(interval=6))
+        ax.xaxis.set_major_formatter(_formatter_pt)
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
         plt.xticks(rotation=30, ha="right")
         ax.legend(fontsize=7, loc="upper right")
         ax.set_ylabel("%")
@@ -90,8 +104,8 @@ def chart_cambio(df):
         ax.fill_between(sub["data"], sub["valor"], alpha=0.12, color="#2b6cb0")
         ax.plot(sub["data"], sub["valor"], color="#2b6cb0", lw=2, label="BRL/USD")
         ax.set_title("Cambio BRL/USD — Fechamento Mensal | Ultimos 5 Anos")
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%b/%y"))
-        ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator(interval=6))
+        ax.xaxis.set_major_formatter(_formatter_pt)
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
         plt.xticks(rotation=30, ha="right")
         ax.set_ylabel("R$/USD")
         fig.tight_layout()
@@ -106,8 +120,8 @@ def chart_selic(df, val_atual):
         ax.axhline(val_atual, color="#c53030", lw=1.2, linestyle="--",
                    label=f"Valor atual: {val_atual:.2f}%")
         ax.set_title("Meta Selic — % a.a. | Ultimos 5 Anos")
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%b/%y"))
-        ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator(interval=6))
+        ax.xaxis.set_major_formatter(_formatter_pt)
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
         plt.xticks(rotation=30, ha="right")
         ax.legend(fontsize=7, loc="lower right")
         ax.set_ylabel("% a.a.")
@@ -122,8 +136,8 @@ def chart_ibc(df):
         ax.plot(orig["data"], orig["valor"], color="#90cdf4", lw=1.2, label="Original")
         ax.plot(sa["data"],   sa["valor"],   color="#2b6cb0", lw=2,   label="Dessaz.")
         ax.set_title("IBC-Br — Indice de Atividade Economica | Ultimos 5 Anos")
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%b/%y"))
-        ax.xaxis.set_major_locator(matplotlib.dates.MonthLocator(interval=6))
+        ax.xaxis.set_major_formatter(_formatter_pt)
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
         plt.xticks(rotation=30, ha="right")
         ax.legend(fontsize=7, loc="lower right")
         ax.set_ylabel("Indice")
@@ -150,8 +164,8 @@ def gerar_secao_selic(df_hist, r):
     data_max = df_s.loc[df_s["valor"].idxmax(), "data"]
     data_ini = df_s.loc[df_s["valor"].idxmin(), "data"]
 
-    mes_max  = data_max.strftime("%B/%Y").lower()
-    mes_ini  = data_ini.strftime("%B/%Y").lower()
+    mes_max  = f"{MESES_PT_FULL[data_max.month-1]}/{data_max.year}"
+    mes_ini  = f"{MESES_PT_FULL[data_ini.month-1]}/{data_ini.year}"
     inicio_ano = selic_v - selic_ano
 
     p1 = (
