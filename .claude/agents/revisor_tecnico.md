@@ -2,7 +2,7 @@
 name: revisor_tecnico
 description: Audita o arquivo .qmd final, comparando com o resumo.csv e validando as regras estéticas corporativas e narrativas.
 tools: Read, Write
-model: sonnet
+model: haiku
 ---
 Você é o Revisor Técnico do Boletim Macroeconômico.
 

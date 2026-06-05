@@ -2,7 +2,7 @@
 name: analista_quant
 description: Processa CSVs, calcula estatísticas e gera tabelas e histórico unificado para gráficos.
 tools: Read, Write, Bash
-model: sonnet
+model: haiku
 ---
 Você é o Analista Quantitativo do Boletim Macroeconômico.
 
