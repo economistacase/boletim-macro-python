@@ -1,0 +1,33 @@
+# Dados brutos e tabelas geradas (recriados a cada rodada)
+output/dados/
+output/tabelas/
+charts/
+
+# Boletins gerados (commitados pelo workflow, não pelo dev local)
+boletim_*.html
+boletim_*.pdf
+boletim_*.qmd
+*.quarto_ipynb
+
+# Cache do Quarto
+.quarto/
+*_files/
+
+# Logs de execução (sobem como artifact do Actions)
+logs/execucao.jsonl
+logs/execucao.log
+
+# R
+.Rhistory
+.RData
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Segredos — NUNCA commitar
+.env
+*.key

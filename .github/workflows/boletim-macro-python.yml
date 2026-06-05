@@ -1,0 +1,78 @@
+name: Boletim Macroeconômico Semanal
+
+on:
+  schedule:
+    # toda segunda-feira, 10:00 UTC = 07:00 BRT
+    - cron: "0 10 * * 1"
+  workflow_dispatch:
+    inputs:
+      data_ref:
+        description: "Data de referência (AAAA-MM-DD). Vazio = hoje."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  gerar-boletim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Instalar dependências Python
+        run: pip install -r requirements.txt
+
+      - name: Configurar Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Instalar Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Criar diretórios necessários
+        run: mkdir -p logs output/dados output/tabelas charts
+
+      - name: Rodar o time de agentes
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DATA="${{ github.event.inputs.data_ref }}"
+          claude -p "/gerar-boletim $DATA" \
+            --allowedTools "Bash,Read,Write,Edit,Agent" \
+            2>&1 | tee logs/execucao.log
+
+      - name: Configurar identidade do bot
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit e push dos produtos gerados
+        run: |
+          # Adiciona os arquivos gerados pela rodada
+          git add logs/revisao.md logs/erros.md 2>/dev/null || true
+          git add boletim_*.qmd boletim_*.html boletim_*.pdf 2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "Nada a publicar nesta rodada."
+          else
+            DATA=$(date -u +%F)
+            git commit -m "Boletim macro $DATA [bot]"
+            git push
+          fi
+
+      - name: Anexar logs como artefato
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ github.run_id }}
+          path: logs/
+          retention-days: 30

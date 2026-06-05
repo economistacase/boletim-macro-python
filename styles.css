@@ -1,0 +1,339 @@
+/* ==========================================
+   BOLETIM MACRO - ESTILOS GLOBAIS
+   ========================================== */
+
+/* Tipografia e cores globais */
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333333;
+    line-height: 1.6;
+    font-size: 11pt;
+}
+
+/* Títulos */
+h1, h2, h3, .quarto-title {
+    color: #1a365d; /* Azul marinho corporativo */
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 8px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+h1 { font-size: 24pt; font-weight: 700; }
+h2 { font-size: 18pt; font-weight: 600; }
+h3 { font-size: 14pt; font-weight: 600; }
+
+/* ==========================================
+   CORREÇÃO: METADADOS DO CABEÇALHO
+   ========================================== */
+
+/* Esconde autor e data duplicados do Quarto */
+.quarto-title-meta {
+    display: none !important;
+}
+
+.quarto-title-meta-heading {
+    display: none !important;
+}
+
+/* Garante que apenas o autor do YAML apareça uma vez */
+.author {
+    display: block;
+    font-size: 11pt;
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+
+/* ==========================================
+   BOTÃO DE IMPRESSÃO
+   ========================================== */
+
+.print-btn {
+    background-color: #2b6cb0;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 10pt;
+    margin: 20px 0;
+    transition: background-color 0.3s;
+}
+
+.print-btn:hover {
+    background-color: #1a365d;
+}
+
+/* ==========================================
+   TABELAS
+   ========================================== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 10pt;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+table thead {
+    background-color: #1a365d;
+    color: white;
+}
+
+table th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border: none;
+}
+
+table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+table tbody tr:hover {
+    background-color: #f7fafc;
+}
+
+/* ==========================================
+   GRÁFICOS E CONTAINERS
+   ========================================== */
+
+/* Container para análise + gráfico (evita quebra) */
+.bloco-analise {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+/* Container dos gráficos Plotly */
+.graph-container,
+.html-widget,
+#htmlwidget-container,
+.plotly {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 20px 0;
+}
+
+/* Gráficos Quarto */
+.quarto-figure {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 25px 0;
+}
+
+.quarto-figure figure {
+    margin: 0;
+    page-break-inside: avoid;
+}
+
+/* ==========================================
+   RODAPÉ
+   ========================================== */
+
+.footer-text {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    font-size: 9pt;
+    color: #718096;
+    text-align: center;
+    page-break-inside: avoid;
+}
+
+/* ==========================================
+   IMPRESSÃO / PDF - CONFIGURAÇÕES CRÍTICAS
+   ========================================== */
+
+@media print {
+    /* Esconde elementos interativos */
+    .print-btn,
+    .no-print,
+    nav,
+    header > nav {
+        display: none !important;
+    }
+    
+    /* Margens A4: Esq 3cm | Sup 3cm | Dir 2cm | Inf 2cm */
+    @page {
+        size: A4;
+        margin: 3cm 2cm 2cm 3cm;
+    }
+    
+    /* Garante cores no PDF */
+    * {
+        print-color-adjust: exact !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+    
+    /* Evita quebras indesejadas */
+    body {
+        font-size: 10.5pt;
+        line-height: 1.5;
+    }
+    
+    h1, h2, h3 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+    
+    /* Containers não quebram */
+    .bloco-analise,
+    .graph-container,
+    table,
+    .quarto-figure,
+    figure,
+    .html-widget {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        orphans: 3;
+        widows: 3;
+    }
+    
+    /* Força gráfico para próxima página se não couber */
+    .bloco-analise {
+        page-break-before: auto;
+        margin-bottom: 30px;
+    }
+    
+    /* Tabelas */
+    table {
+        font-size: 9pt;
+        page-break-inside: auto;
+    }
+    
+    table tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    
+    /* Cabeçalho da tabela repete */
+    thead {
+        display: table-header-group;
+    }
+    
+    /* Rodapé sempre visível */
+    .footer-text {
+        margin-top: 40px;
+        page-break-inside: avoid;
+    }
+}
+
+/* ==========================================
+   RESPONSIVIDADE (TELA)
+   ========================================== */
+
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 10pt;
+        padding: 15px;
+    }
+    
+    h1 { font-size: 20pt; }
+    h2 { font-size: 16pt; }
+    
+    table {
+        font-size: 9pt;
+    }
+    
+    table th, table td {
+        padding: 8px;
+    }
+}
+
+/* ── Bloco PNG + caption: oculto na tela, visível no print ── */
+.print-chart-block {
+  display: none;
+}
+
+.print-caption {
+  display: none;
+}
+
+.print-fonte {
+  font-style: italic;
+  color: #666;
+  font-size: 0.85em;
+}
+
+@media print {
+  /* Colapsa completamente o bloco interativo — sem rastro de espaço */
+  .screen-only {
+    display: none !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Mostra o bloco PNG estático */
+  .print-chart-block {
+    display: block !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin: 4px 0 4px 0;
+  }
+
+  .print-caption {
+    display: block;
+    font-size: 9pt;
+    color: #333;
+    background: #f0f4f8;
+    border-left: 3px solid #2b6cb0;
+    padding: 5px 10px;
+    margin: 0 0 10px 0;
+    break-inside: avoid;
+    text-align: left !important;
+  }
+
+  .print-fonte {
+    font-size: 8pt;
+    color: #555;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* Gráficos Plotly no print: altura fixa para não cortar */
+  .js-plotly-plot,
+  .plotly,
+  .plotly-graph-div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    height: 260px !important;
+    max-height: 260px !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  /* Alinhamento justificado no corpo */
+  body, p {
+    text-align: justify !important;
+  }
+}
+
+/* ==========================================
+   UTILITÁRIOS
+   ========================================== */
+
+.texto-destaque {
+    background-color: #ebf8ff;
+    border-left: 4px solid #2b6cb0;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+}
+
+.dados-fonte {
+    font-size: 9pt;
+    color: #718096;
+    font-style: italic;
+    margin-top: 10px;
+}

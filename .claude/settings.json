@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)", 
+      "Bash(quarto:*)",
+      "Read(**)", 
+      "Write(**)", 
+      "Edit(**)",
+      "WebFetch"
+    ],
+    "ask": [
+      "Bash(git:*)",
+      "Bash(gh:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)", 
+      "Bash(sudo:*)", 
+      "Bash(curl:*)"
+    ]
+  }
+}
