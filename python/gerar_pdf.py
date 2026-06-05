@@ -131,20 +131,30 @@ def chart_ibc(df):
         return fig_to_bytes(fig)
 
 # ── Extrai narrativas do .qmd ─────────────────────────────────────────────────
-def extrair_narrativas(data_ref):
+def extrair_narrativas(data_ref, val_selic=None):
     qmd = os.path.join(BASE, f"boletim_{data_ref}.qmd")
     if not os.path.exists(qmd):
         return {}
     with open(qmd, encoding="utf-8") as f:
         txt = f.read()
     secoes = {}
-    # Extrai cada bloco ### Analise ate o proximo ### ou ```
     for m in re.finditer(r"### Análise\n\n(.*?)(?=\n###|\n```\{|\Z)", txt, re.DOTALL):
         bloco = m.group(1).strip()
-        # Remove marcacao markdown inline
         bloco = re.sub(r"\*\*(.*?)\*\*", r"\1", bloco)
-        bloco = re.sub(r"\*(.*?)\*",   r"\1", bloco)
+        bloco = re.sub(r"\*(.*?)\*",     r"\1", bloco)
         secoes[len(secoes)] = bloco
+
+    # Garante que a narrativa da Selic (secao 2) usa o valor exato do resumo.csv
+    # Evita divergencia quando o .qmd local foi gerado com dados antigos (serie 11)
+    if val_selic is not None and 2 in secoes:
+        selic_fmt = f"{val_selic:.2f}%"
+        # Substitui qualquer "XX,XX% ao ano" ou "XX,XX% a.a." por valor correto
+        secoes[2] = re.sub(
+            r"\d{1,2}[,\.]\d{2,6}%\s*(?:ao\s+ano|a\.a\.)",
+            f"{selic_fmt} a.a.",
+            secoes[2],
+            flags=re.IGNORECASE
+        )
     return secoes
 
 # ── Classe PDF ────────────────────────────────────────────────────────────────
@@ -358,8 +368,8 @@ def main():
     df_hist = pd.read_csv(HIST)
     df_hist["data"] = pd.to_datetime(df_hist["data"])
 
-    narrativas = extrair_narrativas(DATA_REF)
     val_selic  = float(df_res.loc[df_res["indicador"] == "Selic", "valor_atual"].iloc[0])
+    narrativas = extrair_narrativas(DATA_REF, val_selic=val_selic)
 
     pdf = BoletimPDF()
     pdf.capa(DATA_REF)

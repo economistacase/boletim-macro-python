@@ -83,7 +83,7 @@ fig.update_layout(
     plot_bgcolor=COR_FUNDO,
     paper_bgcolor="white",
     height=350,
-    margin=dict(l=20, r=20, t=40, b=20),
+    margin=dict(l=40, r=20, t=45, b=55),
     xaxis=dict(showgrid=True, gridcolor="white", title=""),
     yaxis=dict(showgrid=True, gridcolor="white")
 )
@@ -102,7 +102,7 @@ fig.add_trace(go.Bar(x=df_ipca["data"], y=df_ipca["valor"],
 fig.add_trace(go.Scatter(x=df_ipca["data"], y=df_ipca["mm3"],
     name="Méd. móvel 3m", mode="lines",
     line=dict(color=COR_MEDIA, width=2, dash="dot")))
-fig.update_layout(title="IPCA — Variação Mensal (%) | Últimos 36 Meses", ...)
+fig.update_layout(title="IPCA — Variação Mensal (%) | Últimos 5 Anos", ...)
 
 - Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
 ```
@@ -114,7 +114,7 @@ fig.add_trace(go.Scatter(x=df_cambio["data"], y=df_cambio["valor"],
     name="BRL/USD", mode="lines",
     line=dict(color=COR_LINHA, width=2.5),
     fill="tozeroy", fillcolor="rgba(43,108,176,0.08)"))
-fig.update_layout(title="Câmbio BRL/USD — Fechamento Mensal | Últimos 36 Meses", ...)
+fig.update_layout(title="Câmbio BRL/USD — Fechamento Mensal | Últimos 5 Anos", ...)
 
 - Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
 ```
@@ -130,7 +130,7 @@ fig.add_trace(go.Scatter(x=df_selic["data"], y=df_selic["valor"],
     line=dict(color=COR_LINHA, width=2.5, shape="hv")))
 fig.add_hline(y=val_selic, line_dash="dash", line_color=COR_REF,
     annotation_text=f"Meta atual: {val_selic:.2f}%", annotation_position="top right")
-fig.update_layout(title="Meta Selic — % a.a. | Últimos 36 Meses", ...)
+fig.update_layout(title="Meta Selic — % a.a. | Últimos 5 Anos", ...)
 
 - Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
 ```
@@ -147,7 +147,7 @@ fig.add_trace(go.Scatter(x=df_orig["data"], y=df_orig["valor"],
 fig.add_trace(go.Scatter(x=df_sa["data"], y=df_sa["valor"],
     name="IBC-Br Dessaz.", mode="lines",
     line=dict(color=COR_LINHA, width=2.5)))
-fig.update_layout(title="IBC-Br — Índice de Atividade Econômica | Últimos 36 Meses", ...)
+fig.update_layout(title="IBC-Br — Índice de Atividade Econômica | Últimos 5 Anos", ...)
 
 - Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
 ```
