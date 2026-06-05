@@ -83,10 +83,22 @@ fig.update_layout(
     plot_bgcolor=COR_FUNDO,
     paper_bgcolor="white",
     height=350,
-    margin=dict(l=40, r=20, t=45, b=55),
+    margin=dict(l=40, r=20, t=45, b=30),
     xaxis=dict(showgrid=True, gridcolor="white", title=""),
     yaxis=dict(showgrid=True, gridcolor="white")
 )
+```
+
+**PROIBIDO:** Nunca adicionar texto de fonte dentro do gráfico Plotly via `add_annotation`, `fig.update_layout(annotations=...)` ou qualquer outro método. A fonte é adicionada SOMENTE como parágrafo HTML separado após o `fig.show()`, conforme o padrão abaixo.
+
+**Padrão obrigatório após cada `fig.show()`:**
+```python
+fig.show()
+```
+```python
+#| echo: false
+from IPython.display import HTML
+HTML('<p class="fonte-grafico"><em>Fonte: [texto da fonte específica].</em></p>')
 ```
 
 #### Gráfico 1 — IPCA (barras + média móvel)
@@ -103,8 +115,12 @@ fig.add_trace(go.Scatter(x=df_ipca["data"], y=df_ipca["mm3"],
     name="Méd. móvel 3m", mode="lines",
     line=dict(color=COR_MEDIA, width=2, dash="dot")))
 fig.update_layout(title="IPCA — Variação Mensal (%) | Últimos 5 Anos", ...)
-
-- Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
+fig.show()
+```
+```python
+#| echo: false
+from IPython.display import HTML
+HTML('<p class="fonte-grafico"><em>Fonte: IBGE — Sistema Nacional de Índices de Preços ao Consumidor (SNIPC). Elaboração: Raimundo Casé.</em></p>')
 ```
 
 #### Gráfico 2 — Câmbio (linha com área, SEM linha de referência)
@@ -115,8 +131,12 @@ fig.add_trace(go.Scatter(x=df_cambio["data"], y=df_cambio["valor"],
     line=dict(color=COR_LINHA, width=2.5),
     fill="tozeroy", fillcolor="rgba(43,108,176,0.08)"))
 fig.update_layout(title="Câmbio BRL/USD — Fechamento Mensal | Últimos 5 Anos", ...)
-
-- Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
+fig.show()
+```
+```python
+#| echo: false
+from IPython.display import HTML
+HTML('<p class="fonte-grafico"><em>Fonte: Banco Central do Brasil — PTAX (taxa de câmbio de referência). Elaboração: Raimundo Casé.</em></p>')
 ```
 
 #### Gráfico 3 — Selic (step line + linha de referência "Meta Selic")
@@ -128,11 +148,18 @@ fig = go.Figure()
 fig.add_trace(go.Scatter(x=df_selic["data"], y=df_selic["valor"],
     name="Meta Selic % a.a.", mode="lines",
     line=dict(color=COR_LINHA, width=2.5, shape="hv")))
-fig.add_hline(y=val_selic, line_dash="dash", line_color=COR_REF,
-    annotation_text=f"Meta atual: {val_selic:.2f}%", annotation_position="top right")
+fig.add_trace(go.Scatter(
+    x=[df_selic["data"].min(), df_selic["data"].max()],
+    y=[val_selic, val_selic],
+    name=f"Valor atual: {val_selic:.2f}%",
+    mode="lines", line=dict(color=COR_REF, width=1.5, dash="dash")))
 fig.update_layout(title="Meta Selic — % a.a. | Últimos 5 Anos", ...)
-
-- Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
+fig.show()
+```
+```python
+#| echo: false
+from IPython.display import HTML
+HTML('<p class="fonte-grafico"><em>Fonte: Banco Central do Brasil — Comitê de Política Monetária (Copom). Série SGS 432 (Meta Selic). Elaboração: Raimundo Casé.</em></p>')
 ```
 
 #### Gráfico 4 — IBC-Br (duas séries: original + dessazonalizada, SEM linha de referência)
@@ -148,11 +175,13 @@ fig.add_trace(go.Scatter(x=df_sa["data"], y=df_sa["valor"],
     name="IBC-Br Dessaz.", mode="lines",
     line=dict(color=COR_LINHA, width=2.5)))
 fig.update_layout(title="IBC-Br — Índice de Atividade Econômica | Últimos 5 Anos", ...)
-
-- Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
+fig.show()
 ```
-
-Cada gráfico deve terminar com `fig.show()`.
+```python
+#| echo: false
+from IPython.display import HTML
+HTML('<p class="fonte-grafico"><em>Fonte: Banco Central do Brasil — Índice de Atividade Econômica (IBC-Br). Elaboração: Raimundo Casé.</em></p>')
+```
 
 ### 7. Síntese e Perspectivas
 Seção final com 3-4 parágrafos integrando os 4 indicadores numa perspectiva prospectiva. Use negrito para os títulos dos eixos temáticos (ex: **Inflação sob controle...**).
