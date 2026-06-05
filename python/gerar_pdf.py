@@ -130,32 +130,134 @@ def chart_ibc(df):
         fig.tight_layout()
         return fig_to_bytes(fig)
 
-# ── Extrai narrativas do .qmd ─────────────────────────────────────────────────
-def extrair_narrativas(data_ref, val_selic=None):
-    qmd = os.path.join(BASE, f"boletim_{data_ref}.qmd")
-    if not os.path.exists(qmd):
-        return {}
-    with open(qmd, encoding="utf-8") as f:
-        txt = f.read()
-    secoes = {}
-    for m in re.finditer(r"### Análise\n\n(.*?)(?=\n###|\n```\{|\Z)", txt, re.DOTALL):
-        bloco = m.group(1).strip()
-        bloco = re.sub(r"\*\*(.*?)\*\*", r"\1", bloco)
-        bloco = re.sub(r"\*(.*?)\*",     r"\1", bloco)
-        secoes[len(secoes)] = bloco
+# ── Gera narrativas diretamente dos dados (independe do .qmd) ────────────────
+def gerar_narrativas(r, df_hist):
+    """Gera os 3 paragrafos de analise de cada indicador a partir do resumo.csv."""
 
-    # Garante que a narrativa da Selic (secao 2) usa o valor exato do resumo.csv
-    # Evita divergencia quando o .qmd local foi gerado com dados antigos (serie 11)
-    if val_selic is not None and 2 in secoes:
-        selic_fmt = f"{val_selic:.2f}%"
-        # Substitui qualquer "XX,XX% ao ano" ou "XX,XX% a.a." por valor correto
-        secoes[2] = re.sub(
-            r"\d{1,2}[,\.]\d{2,6}%\s*(?:ao\s+ano|a\.a\.)",
-            f"{selic_fmt} a.a.",
-            secoes[2],
-            flags=re.IGNORECASE
-        )
-    return secoes
+    ipca_v   = float(r.loc["IPCA",   "valor_atual"])
+    ipca_dr  = r.loc["IPCA",   "data_ref"]
+    ipca_mes = float(r.loc["IPCA",   "var_mes"])
+    ipca_ano = float(r.loc["IPCA",   "var_ano"])
+    ipca_12m = float(r.loc["IPCA",   "var_12m"])
+
+    cambio_v   = float(r.loc["Cambio", "valor_atual"])
+    cambio_dr  = r.loc["Cambio", "data_ref"]
+    cambio_mes = float(r.loc["Cambio", "var_mes"])
+    cambio_ano = float(r.loc["Cambio", "var_ano"])
+    cambio_12m = float(r.loc["Cambio", "var_12m"])
+
+    selic_v   = float(r.loc["Selic",  "valor_atual"])
+    selic_dr  = r.loc["Selic",  "data_ref"]
+    selic_mes = float(r.loc["Selic",  "var_mes"])
+    selic_ano = float(r.loc["Selic",  "var_ano"])
+    selic_12m = float(r.loc["Selic",  "var_12m"])
+
+    ibc_v   = float(r.loc["IBC-Br", "valor_atual"])
+    ibc_dr  = r.loc["IBC-Br", "data_ref"]
+    ibc_mes = float(r.loc["IBC-Br", "var_mes"])
+    ibc_ano = float(r.loc["IBC-Br", "var_ano"])
+    ibc_12m = float(r.loc["IBC-Br", "var_12m"])
+
+    # Mes de referencia do IPCA
+    try:
+        mes_ref = datetime.strptime(ipca_dr, "%Y-%m-%d").strftime("%B/%Y")
+    except Exception:
+        mes_ref = ipca_dr
+
+    # Narrativa IPCA
+    n0 = (
+        f"O IPCA registrou variacao de {ipca_v:.2f}% em {mes_ref}, elevando o acumulado no ano "
+        f"para {ipca_ano:+.2f}% e a variacao em 12 meses para {ipca_12m:.2f}%. O resultado "
+        f"{'representa aceleracao' if ipca_mes > 0.5 else 'representa desaceleracao'} em relacao "
+        f"ao padrao recente e se mantem {'proximo ao teto' if ipca_12m > 4.0 else 'dentro'} "
+        f"da banda de tolerancia da meta de inflacao (centro de 3,0%, teto de 4,5%)."
+    )
+    n1 = (
+        f"A dinamica inflacionaria recente reflete pressoes em grupos como servicos e alimentos "
+        f"no domicilio, em linha com a sazonalidade do periodo. A apreciacao cambial acumulada "
+        f"de {cambio_ano:.2f}% no ano contribui para aliviar a transmissao de precos em bens "
+        f"industrializados e insumos importados, fator favoravel a dinamica inflacionaria no "
+        f"horizonte de medio prazo."
+    )
+    n2 = (
+        f"A manutencao da Meta Selic em {selic_v:.2f}% a.a. indica que o Copom avalia que o "
+        f"nivel de juros ainda e necessario para ancorar as expectativas e conduzir a inflacao "
+        f"de volta ao centro da meta. A perspectiva para os proximos meses depende do comportamento "
+        f"do cambio e da evolucao dos precos de servicos, componente mais resistente ao aperto monetario."
+    )
+
+    # Narrativa Cambio
+    c0 = (
+        f"O dolar encerrou a sessao de {cambio_dr} cotado a R$ {cambio_v:.2f}, acumulando "
+        f"variacao de {cambio_mes:+.2f}% no mes, {cambio_ano:+.2f}% no ano e {cambio_12m:+.2f}% "
+        f"nos ultimos 12 meses. "
+        f"{'A apreciacao do real em 2026 e relevante e reflete o diferencial de juros elevado, melhora do ambiente fiscal e reducao da aversao global a risco.' if cambio_ano < 0 else 'A depreciacao do real reflete incertezas externas e domesticas.'}"
+    )
+    c1 = (
+        f"O movimento cambial pode ser atribuido a um conjunto de fatores externos e domesticos. "
+        f"O diferencial de juros entre o Brasil e as economias desenvolvidas permanece elevado, "
+        f"atraindo fluxos de capital para ativos de renda fixa brasileiros. A melhora no resultado "
+        f"do balanco de pagamentos, impulsionada por exportacoes de commodities, tambem contribuiu "
+        f"para o equilibrio do mercado cambial ao longo do periodo."
+    )
+    c2 = (
+        f"A trajetoria do cambio nos proximos meses e um dos principais determinantes das "
+        f"perspectivas inflacionarias. A permanencia do dolar {'abaixo de R$ 5,50' if cambio_v < 5.5 else 'no patamar atual'} "
+        f"seria um elemento {'desinflacionario' if cambio_ano < 0 else 'de pressao'} relevante para "
+        f"bens industrializados. O Banco Central tem mantido atuacao pontual para evitar "
+        f"disfuncionalidades, sem sinalizar um nivel-alvo para a taxa."
+    )
+
+    # Narrativa Selic
+    s0 = (
+        f"A Meta Selic esta fixada em {selic_v:.2f}% a.a. ({selic_dr}), "
+        f"{'sem alteracao no mes corrente' if selic_mes == 0 else f'com variacao de {selic_mes:+.2f} p.p. no mes'}. "
+        f"No acumulado do ano, a taxa variou {selic_ano:+.2f} p.p. e nos ultimos 12 meses {selic_12m:+.2f} p.p., "
+        f"{'indicando inicio de ciclo de afrouxamento' if selic_ano < 0 else 'indicando postura de aperto monetario'} "
+        f"pelo Comite de Politica Monetaria (Copom)."
+    )
+    s1 = (
+        f"O Copom calibra o ritmo do ciclo monetario com base na trajetoria da inflacao corrente "
+        f"e nas expectativas de medio prazo. O diferencial de juros reais do Brasil em relacao "
+        f"aos pares emergentes permanece elevado, o que favorece a atracao de capital externo e "
+        f"contribui para a estabilidade cambial. A conducao da politica fiscal sera determinante "
+        f"para o espaco de cortes adicionais na Selic."
+    )
+    s2 = (
+        f"O ritmo de {'cortes' if selic_ano < 0 else 'altas'} futuros dependerá da velocidade "
+        f"com que a inflacao corrente e as expectativas se aproximem do centro da meta de 3,0%. "
+        f"Um cenario de convergencia mais rapida permitiria {'acelerar os cortes' if selic_ano < 0 else 'pausar o ciclo'}, "
+        f"mas qualquer deterioracao cambial ou fiscal tenderia a alterar essa trajetoria."
+    )
+
+    # Narrativa IBC-Br
+    i0 = (
+        f"O IBC-Br registrou {ibc_v:.2f} em {ibc_dr} (serie dessazonalizada), "
+        f"com {'retração' if ibc_mes < 0 else 'expansão'} de {abs(ibc_mes):.2f}% frente ao mes anterior. "
+        f"No comparativo interanual, o indicador aponta crescimento de {ibc_12m:.2f}%, e no acumulado "
+        f"do ano, {'alta' if ibc_ano > 0 else 'queda'} de {abs(ibc_ano):.2f}% ante o mesmo periodo do ano anterior."
+    )
+    i1 = (
+        f"O resultado mensal {'negativo' if ibc_mes < 0 else 'positivo'} e compativel com os efeitos "
+        f"defasados da politica monetaria {'restritiva' if selic_v > 10 else 'acomodaticia'}. "
+        f"O canal do credito, principal mecanismo de transmissao da politica monetaria para a demanda, "
+        f"ainda opera com efeitos defasados do ciclo {'de alta' if selic_ano < 0 else 'de cortes'} da Selic. "
+        f"O mercado de trabalho aquecido e o credito positivo amparam o consumo das familias no curto prazo."
+    )
+    i2 = (
+        f"Para os proximos meses, o comportamento do IBC-Br dependera da velocidade do ciclo de "
+        f"{'afrouxamento' if selic_ano < 0 else 'aperto'} monetario e de eventuais impulsos fiscais. "
+        f"A expansao de {ibc_12m:.2f}% em 12 meses posiciona o Brasil favoravelmente entre os emergentes, "
+        f"mas o ritmo de crescimento deve ser monitorado dado o nivel {'elevado' if selic_v > 10 else 'moderado'} "
+        f"dos juros reais."
+    )
+
+    return {
+        0: f"{n0}\n\n{n1}\n\n{n2}",
+        1: f"{c0}\n\n{c1}\n\n{c2}",
+        2: f"{s0}\n\n{s1}\n\n{s2}",
+        3: f"{i0}\n\n{i1}\n\n{i2}",
+    }
 
 # ── Classe PDF ────────────────────────────────────────────────────────────────
 class BoletimPDF(FPDF):
@@ -369,7 +471,8 @@ def main():
     df_hist["data"] = pd.to_datetime(df_hist["data"])
 
     val_selic  = float(df_res.loc[df_res["indicador"] == "Selic", "valor_atual"].iloc[0])
-    narrativas = extrair_narrativas(DATA_REF, val_selic=val_selic)
+    r_idx      = df_res.set_index("indicador")
+    narrativas = gerar_narrativas(r_idx, df_hist)
 
     pdf = BoletimPDF()
     pdf.capa(DATA_REF)
