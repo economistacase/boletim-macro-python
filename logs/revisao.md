@@ -1,10 +1,10 @@
 ok
 
-# Parecer de Revisão Técnica — Boletim Macroeconômico 2026-06-04
+# Parecer de Revisão Técnica — Boletim Macroeconômico 2026-06-08
 
-**Arquivo auditado:** `boletim_2026-06-04.qmd`
+**Arquivo auditado:** `boletim_2026-06-08.qmd`
 **Fonte de dados:** `output/tabelas/resumo.csv`
-**Data do parecer:** 2026-06-04
+**Data do parecer:** 2026-06-08
 
 ---
 
@@ -12,71 +12,69 @@ ok
 
 ### Valores do CSV (referência)
 
-| Indicador | valor_atual               | var_mes | var_ano | var_12m |
-|-----------|--------------------------|---------|---------|---------|
-| IPCA      | 0.67                     | 0.67    | 2.6     | 4.39    |
-| Cambio    | 5.0415                   | -0.3    | -8.38   | -7.62   |
-| Selic     | 14.400136155785216       | 0.0     | -0.5    | -0.25   |
-| IBC-Br    | 110.24204                | -0.67   | 1.41    | 3.07    |
+| Indicador | valor_atual | var_mes | var_ano | var_12m |
+|-----------|-------------|---------|---------|---------|
+| IPCA      | 0.67        | 0.67    | 2.60    | 4.39    |
+| Cambio    | 5.12        | 1.33    | -6.87   | -6.10   |
+| Selic     | 14.50       | 0.00    | -0.50   | -0.25   |
+| IBC-Br    | 110.24      | -0.67   | 1.41    | 3.07    |
 
-### Tabela HTML (codigo Python — funcao fmt_valor_atual)
+### Tabela HTML (código Python — formatação)
 
-- IPCA: f"{v}%" exibe 0.67%. Exato. CONFORME.
-- Cambio: f"R$ {v}" exibe R$ 5.0415. Exato. CONFORME.
-- Selic: f"{v:.6f}% a.a." exibe 14.400136% a.a. (6 casas decimais, cobrindo os primeiros 8 digitos significativos). CONFORME.
-- IBC-Br: f"{v}" exibe 110.24204. Exato. CONFORME.
-- Variacoes (var_mes, var_ano, var_12m): formatadas com {:+.2f}% — arredondamento a 2 casas permitido. CONFORME.
+- IPCA: "{valor_atual}" exibe 0.67%. Exato. CONFORME.
+- Cambio: "{valor_atual}" exibe 5.12. Exato. CONFORME.
+- Selic: "{valor_atual}" exibe 14.50. Exato. CONFORME.
+- IBC-Br: "{valor_atual}" exibe 110.24. Exato. CONFORME.
+- Variações (var_mes, var_ano, var_12m): formatadas com "{:+.2f}%" — arredondamento a 2 casas decimais permitido. CONFORME.
 
 ### Narrativa textual
 
-- Linha 22: Selic 14,40% (arredondado de 14.400136) — permitido. CONFORME.
-- Linha 22: IBC-Br 110,24 (arredondado de 110.24204) — permitido. CONFORME.
-- Linha 22: Cambio 5,0415 — exato. CONFORME.
-- Linha 195: Cambio 5,0415, var_ano -8,38%, var_12m -7,62% — exatos. CONFORME.
-- Linha 195: var_mes -0,30% (CSV: -0.3) — arredondamento permitido. CONFORME.
-- Linha 258: Selic var_ano -0,50 pp (CSV: -0.5), var_12m -0,25 pp (CSV: -0.25) — corretos. CONFORME.
-- Linha 319: IBC-Br 110,24, var_mes -0,67%, var_ano 1,41%, var_12m 3,07% — corretos. CONFORME.
+- Linha 22 (Panorama Geral): IPCA "0,67%", acumulado "2,60%", 12m "4,39%", Câmbio "5,12", "1,33%", "-6,87%", "-6,10%", Selic "14,50%", IBC-Br "0,67%" — todos exatos. CONFORME.
+- Linha 120 (IPCA): "0,67% em abril", "2,60%", "4,39%" — exatos. CONFORME.
+- Linha 187 (Câmbio): "5,12", "1,33%", "6,87%", "6,10%" — exatos. CONFORME.
+- Linha 260 (Selic): "14,50%", "0,50 ponto percentual", "-0,25 ponto percentual" — exatos. CONFORME.
+- Linha 331 (IBC-Br): "110,24", "0,67%", "1,41%", "3,07%" — exatos. CONFORME.
 
 **Resultado: APROVADO**
 
 ---
 
-## 2. Estetica Corporativa dos Graficos
+## 2. Estética Corporativa dos Gráficos
 
-### IPCA (linhas 161-184)
-- go.Bar presente. CONFORME.
-- go.Scatter com dash="dot" (media movel sobreposta) presente. CONFORME.
-- plot_bgcolor definido (COR_FUNDO). CONFORME.
-- fig.show() presente. CONFORME.
+### IPCA (linhas 128-171)
+- `go.Bar` presente (linha 147). CONFORME.
+- `go.Scatter` com `dash="dot"` para média móvel sobreposta (linha 158). CONFORME.
+- `plot_bgcolor=COR_FUNDO` definido (linha 162). CONFORME.
+- `fig.show()` presente (linha 170). CONFORME.
 
-### Cambio (linhas 221-247)
-- go.Scatter com fill="tozeroy" presente. CONFORME.
-- add_hline presente. CONFORME.
-- plot_bgcolor definido. CONFORME.
-- fig.show() presente. CONFORME.
+### Câmbio (linhas 195-244)
+- `go.Scatter` com `fill="tozeroy"` (linha 221). CONFORME.
+- `add_hline` presente (linhas 224-231). CONFORME.
+- `plot_bgcolor=COR_FUNDO` definido (linha 235). CONFORME.
+- `fig.show()` presente (linha 243). CONFORME.
 
-### Selic (linhas 284-308)
-- go.Scatter com line=dict(shape="hv") (degrau) presente. CONFORME.
-- add_hline presente. CONFORME.
-- plot_bgcolor definido. CONFORME.
-- fig.show() presente. CONFORME.
+### Selic (linhas 268-315)
+- `go.Scatter` com `shape="hv"` (degrau, linha 293). CONFORME.
+- `add_hline` presente (linhas 295-302). CONFORME.
+- `plot_bgcolor=COR_FUNDO` definido (linha 306). CONFORME.
+- `fig.show()` presente (linha 314). CONFORME.
 
-### IBC-Br (linhas 341-377)
-- Duas series presentes: dados filtrados por "IBC-Br (original)" e "IBC-Br (dessaz.)" no historico.csv; exibidas como "IBC-Br Original" e "IBC-Br Dessaz." na legenda. CONFORME.
-- add_hline presente. CONFORME.
-- plot_bgcolor definido. CONFORME.
-- fig.show() presente. CONFORME.
+### IBC-Br (linhas 339-384)
+- Duas séries presentes: "IBC-Br (original)" (linha 362) e "IBC-Br (dessaz.)" (linha 369). CONFORME.
+- Ambas como `go.Scatter` com cores diferenciadas. CONFORME.
+- `plot_bgcolor=COR_FUNDO` definido (linha 375). CONFORME.
+- `fig.show()` presente (linha 383). CONFORME.
 
 **Resultado: APROVADO**
 
 ---
 
-## 3. Credenciais, Botao e Rodape
+## 3. Credenciais, Botão e Rodapé
 
-- YAML author (linha 4): "Raimundo Case". CONFORME.
-- Botao print (linha 18): <button class="print-btn" onclick="window.print()">. CONFORME.
-- Rodape com nome (linha 397): "Raimundo Case - economista". CONFORME.
-- Fontes BCB e IBGE no rodape (linha 397): presentes explicitamente. CONFORME.
+- YAML `author` (linha 4): "Raimundo Casé". CONFORME.
+- Botão print (linha 18): `<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>`. CONFORME.
+- Rodapé com nome (linha 408): "Raimundo Casé - economista". CONFORME.
+- Fontes BCB e IBGE no rodapé (linha 409): presentes explicitamente. CONFORME.
 
 **Resultado: APROVADO**
 
@@ -84,12 +82,18 @@ ok
 
 ## 4. Tom Institucional
 
-Adjetivos vedados ("cirurgico", "destrava", "pujante", "expressivo" como magnitude) ausentes. Linguagem tecnica e objetiva em todo o documento. CONFORME.
+Verificação de adjetivos proibidos ("cirúrgico", "destrava", "pujante", "expressivo" como magnitude): ausentes em toda a narrativa. Linguagem técnica e objetiva mantida. CONFORME.
 
 **Resultado: APROVADO**
 
 ---
 
-## Conclusao Geral
+## Conclusão Geral
 
-Todos os quatro itens de auditoria foram aprovados. O boletim esta em conformidade com os padroes de fidelidade numerica, estetica de graficos, credenciais institucionais e tom editorial.
+Todos os quatro itens obrigatórios de auditoria foram aprovados:
+1. Fidelidade numérica: valores do CSV correspondem exatamente à tabela HTML e narrativa textual.
+2. Estética corporativa: todos os 4 gráficos seguem os padrões especificados (IPCA com barras+média móvel, Câmbio com fill+hline, Selic com shape=hv+hline, IBC-Br com duas séries).
+3. Credenciais: author, botão print e rodapé com fontes presentes e corretos.
+4. Tom institucional: linguagem objetiva e sem adjetivos exagerados.
+
+O boletim está em conformidade integral com os padrões de qualidade técnica.

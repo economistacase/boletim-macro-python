@@ -1,0 +1,2 @@
+- **2026-06-08 14:05 UTC** | `publicador` | quarto render falhou: ModuleNotFoundError yaml - jupyter nao disponivel
+- **2026-06-08 14:05 UTC** | `publicador` | gerar_pdf.py falhou: caminho Windows hardcoded C:/Windows/Fonts/arial.ttf - sistema eh Linux
