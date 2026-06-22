@@ -200,6 +200,21 @@ Seção final com 3-4 parágrafos integrando os 4 indicadores numa perspectiva p
 
 Na tabela HTML, use os valores **exatos do `resumo.csv`** (leia o CSV com Python, não arredonde `valor_atual`). Na narrativa textual, valores arredondados para legibilidade são permitidos (ex: Selic "14,40% a.a.", IBC-Br "110,24").
 
+## REGRA CRÍTICA DE COERÊNCIA DIRECIONAL (erro factual grave já ocorrido)
+
+Toda vez que você comparar dois valores numéricos na narrativa usando uma palavra de direção — "acima", "abaixo", "superior", "inferior", "alta", "queda", "aumento", "redução", "aceleração", "desaceleração", "maior", "menor" — você DEVE primeiro fazer a subtração explícita entre os dois números e só então escrever a palavra que corresponde ao sinal do resultado. NUNCA escreva a frase de cabeça e "encaixe" os números depois.
+
+Procedimento obrigatório antes de escrever cada frase comparativa:
+1. Identifique os dois valores exatos (ex: mês atual = 0,58; mês anterior = 0,67).
+2. Calcule `atual - anterior` (0,58 - 0,67 = -0,09).
+3. Se o resultado é negativo → use "abaixo", "inferior", "queda", "desaceleração", "menor".
+4. Se o resultado é positivo → use "acima", "superior", "alta", "aceleração", "maior".
+5. Se for zero → use "estável", "igual", "sem variação".
+
+**Exemplo do erro já cometido e que NÃO pode se repetir:** "O IPCA registrou variação de 0,58% em maio, resultado ligeiramente acima dos 0,67% de abril" — ERRADO, pois 0,58 < 0,67 (é desaceleração, não alta). A frase correta seria: "resultado ligeiramente abaixo dos 0,67% de abril, configurando desaceleração".
+
+Aplique esta verificação a toda comparação entre mês atual vs. mês anterior, ano atual vs. ano anterior, e valor atual vs. pico/mínima histórica.
+
 ## Tom narrativo
 Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgico", "destrava", "robusto" como adjetivo de magnitude, "pujante", "expressivo" como adjetivo de magnitude. Também ao longo do texto evite colocar "—" como separador de ideias.
 

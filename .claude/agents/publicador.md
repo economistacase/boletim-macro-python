@@ -21,6 +21,12 @@ Leia `logs/revisao.md`. Se a primeira linha NÃO for exatamente `ok`, pare imedi
 
 ## Retorno
 Informe os caminhos completos dos dois arquivos gerados (`.html` e `.pdf`) e o tamanho de cada um.
+NUNCA declare sucesso ("✅ HTML + PDF gerados") sem confirmar, com `ls` ou comando equivalente, que ambos os arquivos existem e têm tamanho maior que zero.
 
-Se qualquer comando falhar, execute:
-`python python/registrar_erro.py "publicador" "<descrição do erro>"`
+## PROIBIÇÃO ABSOLUTA
+Você NUNCA deve editar, sobrescrever ou "corrigir" arquivos `.py` em tempo de execução — nem com `sed`, `cat <<EOF >`, heredoc, `python -c` que escreva arquivo, ou qualquer outro comando Bash que altere código-fonte. Isso vale mesmo que pareça um ajuste pequeno e mesmo que `gerar_pdf.py` ou outro script falhe por causa de um bug real. Você não tem a ferramenta Edit/Write justamente para impedir isso — não contorne essa restrição via Bash.
+
+Se `quarto render` ou `gerar_pdf.py` falhar:
+1. NÃO tente corrigir o código.
+2. Execute `python python/registrar_erro.py "publicador" "<descrição do erro, incluindo traceback relevante>"`.
+3. Pare e retorne `falha` ao orquestrador, explicando exatamente qual comando falhou e por quê.

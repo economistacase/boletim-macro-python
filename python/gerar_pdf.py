@@ -325,17 +325,16 @@ class BoletimPDF(FPDF):
         super().__init__(orientation="P", unit="mm", format="A4")
         self.set_margins(ML, MT, MR)
         self.set_auto_page_break(auto=True, margin=MB)
-        # Fontes Unicode (Arial TTF do Windows)
-        self.add_font("Arial",  "",  "C:/Windows/Fonts/arial.ttf")
-        self.add_font("Arial",  "B", "C:/Windows/Fonts/arialbd.ttf")
-        self.add_font("Arial",  "I", "C:/Windows/Fonts/ariali.ttf")
+        # Fonte core do fpdf2 (Helvetica): embutida no pacote, sem dependencia
+        # de arquivo TTF do sistema operacional. cp1252 cobre acentos PT e o em-dash "—".
+        self.core_fonts_encoding = "cp1252"
         self.alias_nb_pages()
         self.add_page()
 
     def header(self):
         if self.page_no() == 1:
             return
-        self.set_font("Arial", "B", 8)
+        self.set_font("Helvetica", "B", 8)
         self.set_text_color(*CINZA_TXT)
         self.cell(0, 6, f"Boletim Macroeconômico Semanal | {DATA_REF}", align="L")
         self.ln(1)
@@ -350,7 +349,7 @@ class BoletimPDF(FPDF):
         self.set_line_width(0.2)
         self.line(ML, self.get_y(), A4_W - MR, self.get_y())
         self.ln(2)
-        self.set_font("Arial", "", 7)
+        self.set_font("Helvetica", "", 7)
         self.set_text_color(*CINZA_TXT)
         self.cell(TW * 0.7, 4,
                   "Raimundo Casé - economista | economistacase@gmail.com  |  Fontes: BCB e IBGE",
@@ -363,14 +362,14 @@ class BoletimPDF(FPDF):
         self.set_fill_color(*AZUL)
         self.rect(0, 0, A4_W, 38, "F")
         self.set_y(8)
-        self.set_font("Arial", "B", 22)
+        self.set_font("Helvetica", "B", 22)
         self.set_text_color(*BRANCO)
         self.cell(0, 10, "Boletim Macroeconômico Semanal", align="C", new_x="LMARGIN", new_y="NEXT")
-        self.set_font("Arial", "", 11)
+        self.set_font("Helvetica", "", 11)
         self.cell(0, 8, f"Semana de referência: {data_ref}", align="C", new_x="LMARGIN", new_y="NEXT")
         self.ln(14)
         self.set_text_color(*CINZA_TXT)
-        self.set_font("Arial", "B", 10)
+        self.set_font("Helvetica", "B", 10)
         self.cell(0, 6, "Raimundo Casé - economista", new_x="LMARGIN", new_y="NEXT")
         self.ln(2)
 
@@ -378,14 +377,14 @@ class BoletimPDF(FPDF):
         self.ln(4)
         self.set_fill_color(*AZUL)
         self.set_text_color(*BRANCO)
-        self.set_font("Arial", "B", 11)
+        self.set_font("Helvetica", "B", 11)
         self.cell(0, 8, f"  {numero}. {titulo}", fill=True,
                   new_x="LMARGIN", new_y="NEXT")
         self.ln(3)
 
     def sub_titulo(self, txt):
         self.set_text_color(*AZUL)
-        self.set_font("Arial", "B", 9)
+        self.set_font("Helvetica", "B", 9)
         self.cell(0, 5, txt, new_x="LMARGIN", new_y="NEXT")
         self.set_draw_color(*AZUL)
         self.set_line_width(0.2)
@@ -394,7 +393,7 @@ class BoletimPDF(FPDF):
         self.set_text_color(*CINZA_TXT)
 
     def paragrafo(self, txt):
-        self.set_font("Arial", "", 9)
+        self.set_font("Helvetica", "", 9)
         self.set_text_color(*CINZA_TXT)
         self.multi_cell(TW, 4.5, txt, align="J")
         self.ln(2)
@@ -415,11 +414,11 @@ class BoletimPDF(FPDF):
         # Barra lateral azul
         self.line(ML, self.get_y(), ML, self.get_y() + 10)
         self.set_x(ML + 3)
-        self.set_font("Arial", "B", 8)
+        self.set_font("Helvetica", "B", 8)
         self.set_text_color(50, 50, 50)
         self.multi_cell(TW - 3, 4, linha1)
         self.set_x(ML + 3)
-        self.set_font("Arial", "I", 7.5)
+        self.set_font("Helvetica", "I", 7.5)
         self.set_text_color(*CINZA_TXT)
         self.cell(TW - 3, 4, fonte, new_x="LMARGIN", new_y="NEXT")
         self.ln(4)
@@ -433,7 +432,7 @@ class BoletimPDF(FPDF):
         # Cabecalho
         self.set_fill_color(*AZUL)
         self.set_text_color(*BRANCO)
-        self.set_font("Arial", "B", 8)
+        self.set_font("Helvetica", "B", 8)
         for c, w in zip(cols, widths):
             self.cell(w, 7, c, border=0, fill=True, align="C")
         self.ln()
@@ -460,9 +459,9 @@ class BoletimPDF(FPDF):
             # Nome do indicador
             self.set_fill_color(248, 249, 250)
             self.set_text_color(30, 30, 30)
-            self.set_font("Arial", "B", 8)
+            self.set_font("Helvetica", "B", 8)
             self.cell(widths[0], 7, ind, border="B", fill=True, align="L")
-            self.set_font("Arial", "", 8)
+            self.set_font("Helvetica", "", 8)
             self.cell(widths[1], 7, str(row["unidade"]), border="B", fill=True, align="C")
             self.cell(widths[2], 7, str(row["valor_atual"]), border="B", fill=True, align="C")
             self.cell(widths[3], 7, str(row["data_ref"]), border="B", fill=True, align="C")
@@ -473,7 +472,7 @@ class BoletimPDF(FPDF):
             self.ln()
 
         # Fonte
-        self.set_font("Arial", "I", 7.5)
+        self.set_font("Helvetica", "I", 7.5)
         self.set_text_color(*CINZA_TXT)
         self.cell(0, 5,
                   "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé.",
