@@ -1,9 +1,12 @@
 """
 Analise Quantitativa - Boletim Macroeconomico
-Data de referencia: 2026-06-04
+Uso: python python/analise.py [DATA_REFERENCIA]
+     DATA_REFERENCIA (YYYY-MM-DD) padrao: data atual. Usada apenas como corte
+     dos 5 anos do historico.csv.
 Gera: output/tabelas/resumo.csv e output/tabelas/historico.csv
 """
 
+import sys
 import pandas as pd
 import numpy as np
 import os
@@ -14,12 +17,12 @@ warnings.filterwarnings("ignore")
 # ---------------------------------------------------------------------------
 # Configuracoes
 # ---------------------------------------------------------------------------
-BASE_DIR = "F:/boletim-macro-python"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DADOS_DIR = os.path.join(BASE_DIR, "output", "dados")
 TABELAS_DIR = os.path.join(BASE_DIR, "output", "tabelas")
 os.makedirs(TABELAS_DIR, exist_ok=True)
 
-DATA_REF = pd.Timestamp("2026-06-04")
+DATA_REF = pd.Timestamp(sys.argv[1]) if len(sys.argv) > 1 else pd.Timestamp.today()
 ALERTAS = []
 
 # ---------------------------------------------------------------------------
@@ -148,13 +151,10 @@ if pd.isna(var_12m_cambio):
 
 # ---------------------------------------------------------------------------
 # Selic (% a.a.)
-# A serie bruta (serie 11 do BCB) armazena a taxa Over Selic em % ao dia.
-# Exemplo: 0.053400 significa 0.0534% ao dia.
-# Conversao para % a.a. por capitalizacao composta com 252 dias uteis:
-#   taxa_aa = ((1 + taxa_dia/100)^252 - 1) * 100
+# Serie 432 do BCB (Meta Selic): valor exato cravado pelo Copom em % a.a.
+# Ja vem na unidade correta - sem conversao necessaria.
 # ---------------------------------------------------------------------------
 selic_clean = selic_raw.dropna(subset=["valor"]).copy()
-# Serie 432 (Meta Selic) ja e % a.a. definida pelo Copom - sem conversao necessaria
 print("INFO: Meta Selic (serie 432) carregada diretamente em % a.a.")
 
 selic_atual_val, selic_atual_data = ultimo_valor(selic_clean)
