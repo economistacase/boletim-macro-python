@@ -9,6 +9,9 @@ boletim_*.pdf
 boletim_*.qmd
 *.quarto_ipynb
 
+# Excecao: nome fixo do PDF e o produto final estavel, deve ser commitado
+!boletim_latest.pdf
+
 # Cache do Quarto
 .quarto/
 *_files/
