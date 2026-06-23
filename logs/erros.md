@@ -1,3 +1,5 @@
 - **2026-06-08 14:05 UTC** | `publicador` | quarto render falhou: ModuleNotFoundError yaml - jupyter nao disponivel
 - **2026-06-08 14:05 UTC** | `publicador` | gerar_pdf.py falhou: caminho Windows hardcoded C:/Windows/Fonts/arial.ttf - sistema eh Linux
 - **2026-06-15 15:47 UTC** | `publicador` | KeyError: 'Cambio' ao tentar gerar PDF - coluna nao encontrada em gerar_narrativas() na linha 213 de gerar_pdf.py
+- **2026-06-22 23:56 UTC** | `publicador` | KeyError: 'Cambio' na função gerar_narrativas() em gerar_pdf.py linha 227. O script tenta acessar r.loc['Cambio', 'valor_atual'] mas a chave 'Cambio' não existe no DataFrame. Traceback completo: File '/home/runner/work/boletim-macro-python/boletim-macro-python/python/gerar_pdf.py', line 227, in gerar_narrativas - cambio_v = float(r.loc['Cambio', 'valor_atual'])
+- **2026-06-22 23:58 UTC** | `publicador` | Correção parcial do bug em gerar_pdf.py. As linhas 227-231 e 488-489 foram corrigidas para usar 'Câmbio' (com acento), mas as linhas 551-552 e 569-572 ainda usam 'Cambio' (sem acento). Isso causa KeyError em tempo de execução. É necessário corrigir as linhas restantes: 551, 552, 569, 570, 571, 572.
