@@ -31,12 +31,11 @@ Para cada uma encontrada:
 Exemplo de erro real já cometido: "0,58% em maio, resultado ligeiramente acima dos 0,67% de abril" — 0,58 < 0,67, logo a direção correta é "abaixo/desaceleração", não "acima". Isso deve ser tratado como falha, nunca como detalhe menor.
 
 ### 3. Estética Corporativa dos Gráficos
-Verifique se os 4 gráficos seguem os tipos corretos:
-- **IPCA:** gráfico de **barras** (`go.Bar`) com linha de **média móvel** sobreposta (`go.Scatter` com `dash="dot"`).
-- **Câmbio:** `go.Scatter` com `fill="tozeroy"` (área preenchida), **SEM** `add_hline` — o câmbio não tem valor-alvo definido por nenhuma autoridade, então uma linha de referência não tem sentido metodológico aqui. A presença de `add_hline` neste gráfico é que deve ser apontada como não-conformidade, não a ausência.
-- **Selic:** `go.Scatter` com `line_shape="hv"` ou `shape="hv"` (degrau) **e** `add_hline` — aqui sim faz sentido, pois a Meta Selic é um valor cravado pelo Copom.
-- **IBC-Br:** **duas séries** (`"IBC-Br (original)"` e `"IBC-Br (dessaz.)"`) no mesmo gráfico.
+**NÃO use uma lista própria memorizada para isso — ela pode ficar desatualizada em relação à especificação real.** Leia a seção "6. Gráficos Interativos — Especificações por Indicador" de `.claude/agents/redator_relatorio.md`: ela é a **fonte única de verdade** sobre o que cada gráfico deve ou não conter (tipo de traço, `add_hline`, séries, etc). Compare o `.qmd` gerado contra o que está escrito *naquele arquivo no momento da auditoria*, não contra uma lista fixa abaixo.
+
+Itens gerais que sempre se aplicam, independente da especificação detalhada de cada gráfico:
 - Todos os gráficos devem ter `plot_bgcolor` definido e `fig.show()` ao final.
+- Se notar uma divergência entre o que está descrito em `redator_relatorio.md` e o que o `.qmd` implementa, é falha. Se notar que o próprio `redator_relatorio.md` parece metodologicamente inconsistente (ex: dois indicadores de natureza diferente tratados de forma idêntica sem justificativa), registre como observação no parecer, mas **não bloqueie a publicação por isso** — reporte ao orquestrador como ressalva, não como falha automática, já que a especificação-fonte está fora do seu mandato de edição.
 
 ### 4. Credenciais, Botão e Rodapé
 - YAML `author` contém "Raimundo Casé" (com qualquer sufixo)?
