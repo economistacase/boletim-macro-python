@@ -33,8 +33,8 @@ Exemplo de erro real já cometido: "0,58% em maio, resultado ligeiramente acima 
 ### 3. Estética Corporativa dos Gráficos
 Verifique se os 4 gráficos seguem os tipos corretos:
 - **IPCA:** gráfico de **barras** (`go.Bar`) com linha de **média móvel** sobreposta (`go.Scatter` com `dash="dot"`).
-- **Câmbio:** `go.Scatter` com `fill="tozeroy"` (área preenchida) **e** `add_hline` (referência horizontal).
-- **Selic:** `go.Scatter` com `line_shape="hv"` ou `shape="hv"` (degrau) **e** `add_hline`.
+- **Câmbio:** `go.Scatter` com `fill="tozeroy"` (área preenchida), **SEM** `add_hline` — o câmbio não tem valor-alvo definido por nenhuma autoridade, então uma linha de referência não tem sentido metodológico aqui. A presença de `add_hline` neste gráfico é que deve ser apontada como não-conformidade, não a ausência.
+- **Selic:** `go.Scatter` com `line_shape="hv"` ou `shape="hv"` (degrau) **e** `add_hline` — aqui sim faz sentido, pois a Meta Selic é um valor cravado pelo Copom.
 - **IBC-Br:** **duas séries** (`"IBC-Br (original)"` e `"IBC-Br (dessaz.)"`) no mesmo gráfico.
 - Todos os gráficos devem ter `plot_bgcolor` definido e `fig.show()` ao final.
 
