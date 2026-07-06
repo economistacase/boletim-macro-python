@@ -59,25 +59,27 @@ jobs:
 
       - name: Commit e push dos produtos gerados
         run: |
-          # Checagem determinística: o agente pode alegar sucesso sem ter
-          # de fato gerado os arquivos. Não confiamos no relato do LLM —
-          # exigimos que os arquivos esperados existam de verdade.
-          HTML_SRC="boletim_${DATA}.html"
-          PDF_SRC="boletim_${DATA}.pdf"
+          # Busca os arquivos gerados em qualquer subdiretório da árvore de
+          # trabalho — o agente pode colocar o .qmd (e o HTML resultante) em
+          # subpastas como output/ em vez da raiz, então não assumimos local fixo.
+          HTML_FOUND=$(find . -name "boletim_${DATA}.html" -not -path "./.git/*" 2>/dev/null | head -1)
+          PDF_FOUND=$(find . -name "boletim_${DATA}.pdf" -not -path "./.git/*" 2>/dev/null | head -1)
 
-          if [ ! -s "$HTML_SRC" ]; then
-            echo "::error::Esperava encontrar $HTML_SRC mas o arquivo não existe ou está vazio. A pipeline relatou sucesso, mas o produto não foi gerado."
-            python python/registrar_erro.py "workflow" "Commit e push: $HTML_SRC ausente ou vazio apos a etapa 'Rodar o time de agentes'." || true
+          if [ -z "$HTML_FOUND" ] || [ ! -s "$HTML_FOUND" ]; then
+            echo "::error::Arquivo boletim_${DATA}.html não encontrado na árvore de trabalho. A pipeline relatou sucesso, mas o produto não foi gerado."
+            python python/registrar_erro.py "workflow" "Commit e push: boletim_${DATA}.html ausente ou vazio." || true
             exit 1
           fi
-          if [ ! -s "$PDF_SRC" ]; then
-            echo "::error::Esperava encontrar $PDF_SRC mas o arquivo não existe ou está vazio. A pipeline relatou sucesso, mas o produto não foi gerado."
-            python python/registrar_erro.py "workflow" "Commit e push: $PDF_SRC ausente ou vazio apos a etapa 'Rodar o time de agentes'." || true
+          if [ -z "$PDF_FOUND" ] || [ ! -s "$PDF_FOUND" ]; then
+            echo "::error::Arquivo boletim_${DATA}.pdf não encontrado na árvore de trabalho. A pipeline relatou sucesso, mas o produto não foi gerado."
+            python python/registrar_erro.py "workflow" "Commit e push: boletim_${DATA}.pdf ausente ou vazio." || true
             exit 1
           fi
 
-          cp "$HTML_SRC" index.html
-          cp "$PDF_SRC" boletim_latest.pdf
+          echo "HTML encontrado em: $HTML_FOUND"
+          echo "PDF encontrado em: $PDF_FOUND"
+          cp "$HTML_FOUND" index.html
+          cp "$PDF_FOUND" boletim_latest.pdf
 
           git add logs/revisao.md logs/erros.md 2>/dev/null || true
           git add index.html boletim_latest.pdf

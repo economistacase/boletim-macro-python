@@ -220,5 +220,5 @@ Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgic
 
 ## Como proceder
 1. Leia `output/tabelas/resumo.csv` e `output/tabelas/historico.csv`.
-2. Escreva o arquivo `.qmd` completo com Write.
-3. Confirme o caminho gerado.
+2. Escreva o arquivo `.qmd` completo com Write para o caminho exato `boletim_<DATA_REFERENCIA>.qmd` — **sem nenhum prefixo de diretório**, ou seja, o arquivo deve ficar na raiz do projeto, não em `output/` nem em qualquer subpasta. Exemplo correto: `boletim_2026-07-06.qmd`. Exemplo errado: `output/boletim_2026-07-06.qmd`.
+3. Confirme que o arquivo foi criado na raiz: `ls boletim_<DATA_REFERENCIA>.qmd`.
