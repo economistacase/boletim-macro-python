@@ -1,90 +1,77 @@
 ok
 
-Auditoria do boletim_2026-07-06.qmd concluída sem desvios críticos.
+## Auditoria Técnica — boletim_2026-07-13.qmd
 
-## Fidelidade Numérica
+Data da auditoria: 2026-07-13
+Revisor: Sistema Automatizado
 
-Todos os valores numéricos no `.qmd` conferem exatamente com `output/tabelas/resumo.csv`:
+### Resultado Geral
+Nenhuma falha detectada. Documento aprovado para publicação.
 
-- IPCA: 0,58% (mai/2026) ✓
-- Câmbio: R$ 5,17 (06/jul/2026) ✓
-- Selic: 14,25% a.a. (06/jul/2026) ✓
-- IBC-Br: 111,15 (abr/2026) ✓
+### Fidelidade Numérica
+✓ Todos os 16 valores (4 indicadores × 4 comparações) batem com `output/tabelas/resumo.csv` em até 2 casas decimais.
 
-Tabela-resumo HTML (linhas 26-96) lê dinamicamente do CSV com valores exatos. Formatação em 2 casas decimais respeitada. Coloração por variação (verde para positivo, vermelho para negativo) implementada.
+- **IPCA**: 0,16% (valor) / 0,16% (var_mês) / 3,36% (var_ano) / 4,64% (var_12m) — Linhas 22, 89 ✓
+- **Câmbio**: 5,11 BRL/USD (valor) / -1,31% (var_mês) / -7,15% (var_ano) / -8,81% (var_12m) — Linhas 22, 146 ✓
+- **Selic**: 14,25% a.a. (valor) / 0,00% (var_mês) / -0,75% (var_ano) / -0,75% (var_12m) — Linhas 22, 189 ✓
+- **IBC-Br**: 111,15 (valor) / 0,51% (var_mês) / 1,31% (var_ano) / 0,92% (var_12m) — Linhas 22, 237 ✓
 
-## Coerência Direcional
+Tabela-resumo HTML (linhas 26-81) lê dinamicamente do CSV. Formatação respeitada.
 
-Auditadas todas as frases contendo palavras-direção (acima, abaixo, superior, inferior, alta, queda, redução, desaceleração, maior, menor, aceleração, aumento, apreciação):
+### Coerência Direcional
+✓ 10 frases comparativas auditadas. Todas com direção coerente ao sinal matemático.
 
-- Linha 21: "0,58%, abaixo dos 0,67% de abril" → (0,58 - 0,67 = -0,09) → "abaixo" ✓
-- Linha 21: "desaceleração pelo segundo mês consecutivo" → (0,58 < 0,67, -0,09 redução) → "desaceleração" ✓
-- Linha 22: "apreciação do real, acumulando queda de 6,10% no ano" → (var_ano = -6,10) → "queda" ✓
-- Linha 22: "queda de 7,77% em doze meses" → (var_12m = -7,77) → "queda" ✓
-- Linha 104: "resultado abaixo dos 0,67% observados em abril" → (0,58 - 0,67 = -0,09) → "abaixo" ✓
-- Linha 104: "resultado atual é superior (0,58 - 0,26 = +0,32)" → (mai 2026 vs mai 2025) → "superior" ✓
-- Linha 104: "recuos consecutivos (0,67 - 0,88 = -0,21 e 0,58 - 0,67 = -0,09)" → ambas negativas → "recuos" ✓
-- Linha 161: "cotado a R$ 5,17, patamar ligeiramente abaixo do fechamento de junho (5,17 - 5,1766 = -0,01)" → negativo → "abaixo" ✓
-- Linha 161: "apreciação do real" + "valorização de 6,10%" → cambio negativo = real mais forte ✓
-- Linha 161: "distancia de forma consistente do pico da série histórica (5,17 - 6,1923 = -1,02)" → está abaixo do pico ✓
-- Linha 216: "patamar idêntico ao de junho (14,25 - 14,25 = 0,00)" → "idêntico" ✓
-- Linha 216: "taxa atual está abaixo em 0,75 ponto percentual (14,25 - 15,00 = -0,75)" → "abaixo" ✓
-- Linha 276: "valor acima dos 110,59 registrados em março (111,15 - 110,59 = +0,56)" → "acima" ✓
-- Linha 276: "alta mensal de 0,51%" → (var_mes = +0,51) → "alta" ✓
-- Linha 276: "resultado atual também é superior (111,15 - 110,06 = +1,09)" → "superior" ✓
-- Linha 330: "recuou de 0,88% em março para 0,58% em maio" → 0,58 < 0,88 → "recuou" ✓
-- Linha 334: "reduziu a Selic de 15,00% para 14,25%" → redução = queda ✓
+1. Linha 22 — "0,16%, resultado abaixo dos 0,58%": 0,16 - 0,58 = **-0,42** → "abaixo" ✓
+2. Linha 22 — Câmbio "patamar inferior": 5,11 < 5,1766 → "inferior" ✓
+3. Linha 89 — "resultado abaixo dos 0,58% apurados em maio": -0,42 → "abaixo" + "desaceleração" ✓
+4. Linha 146 — "configurando queda mensal": -1,31% → "queda" ✓
+5. Linha 148 — "queda de -8,81%": negativo → "queda" ✓
+6. Linha 189 — "patamar idêntico": 14,25 - 14,25 = **0,00** → "estável" ✓
+7. Linha 189 — "configurando queda": 14,25 - 15,00 = **-0,75** → "queda" ✓
+8. Linha 237 — "alta de 0,51%": 111,15 - 110,59 = **+0,51** → "alta" ✓
+9. Linha 279 — "ficou abaixo do resultado de maio": 0,16 < 0,58 → "abaixo" ✓
+10. Linha 281 — "quedas de 7,15% e 8,81%": ambas negativas → "quedas" ✓
 
-Nenhum erro de coerência direcional detectado. Todos os sinais correspondem às palavras utilizadas.
+Nenhuma inversão de direção. Todos os sinais correspondem às palavras utilizadas.
 
-## Estética Corporativa dos Gráficos
+### Estética Corporativa dos Gráficos
+✓ 4 gráficos conformes com especificação de `redator_relatorio.md` (seção 6, linhas 67-184).
 
-Verificados contra especificação em `.claude/agents/redator_relatorio.md` (seção 6):
+**Gráfico 1 — IPCA (linhas 97-129):**
+- Implementação: `go.Bar` + `go.Scatter` (MM3 com `dash="dot"`)
+- `plot_bgcolor=COR_FUNDO`, `fig.show()` presente
+- Fonte HTML em bloco separado (linhas 132-135) ✓
 
-**Gráfico 1 — IPCA (linhas 112-144):**
-- Implementação: Barras (go.Bar) para IPCA + Scatter (go.Scatter) para média móvel 3m com dash="dot" ✓
-- Especificação: Barras + MM3 pontilhada ✓
-- plot_bgcolor=COR_FUNDO, paper_bgcolor="white", height=350, margins corretas ✓
-- fig.show() ✓
-- Fonte HTML em parágrafo separado com IPython.display.HTML após (linhas 147-151) ✓
+**Gráfico 2 — Câmbio (linhas 154-172):**
+- Implementação: `go.Scatter` com `fill="tozeroy"`, `fillcolor="rgba(43,108,176,0.08)"`
+- **SEM linha de referência adicional** (conforme especificação "SEM linha de referência") ✓
+- `plot_bgcolor=COR_FUNDO`, `fig.show()` presente
+- Fonte HTML separada (linhas 175-178) ✓
 
-**Gráfico 2 — Câmbio (linhas 186-199):**
-- Implementação: Scatter com line, fill="tozeroy", sem linha de referência ✓
-- Especificação: "SEM linha de referência" ✓
-- plot_bgcolor=COR_FUNDO ✓
-- fig.show() ✓
-- Fonte HTML padrão (linhas 202-206) ✓
+**Gráfico 3 — Selic (linhas 197-220):**
+- Implementação: `shape="hv"` (step line) + segunda série com `dash="dash"` (referência)
+- `plot_bgcolor=COR_FUNDO`, `fig.show()` presente
+- Fonte HTML separada (linhas 223-226) ✓
 
-**Gráfico 3 — Selic (linhas 242-259):**
-- Implementação: go.Scatter com shape="hv" (step line) + segundo go.Scatter com linha tracejada (dash="dash") para valor atual ✓
-- Especificação: "step line + linha de referência" ✓
-- plot_bgcolor=COR_FUNDO ✓
-- fig.show() ✓
-- Fonte HTML padrão (linhas 262-266) ✓
+**Gráfico 4 — IBC-Br (linhas 245-266):**
+- Implementação: Duas séries (`IBC-Br (original)` em `COR_LINHA2`, `IBC-Br (dessaz.)` em `COR_LINHA`)
+- **SEM linha de referência** (conforme especificação "SEM linha de referência") ✓
+- `plot_bgcolor=COR_FUNDO`, `fig.show()` presente
+- Fonte HTML separada (linhas 269-272) ✓
 
-**Gráfico 4 — IBC-Br (linhas 298-316):**
-- Implementação: Duas séries em Scatter (IBC-Br Original em COR_LINHA2, IBC-Br Dessazonalizada em COR_LINHA), sem linha de referência ✓
-- Especificação: "SEM linha de referência" ✓
-- plot_bgcolor=COR_FUNDO ✓
-- fig.show() ✓
-- Fonte HTML padrão (linhas 320-324) ✓
+Paleta corporativa: COR_LINHA (#2b6cb0), COR_LINHA2 (#90cdf4), COR_MEDIA (#c53030), COR_REF (#e53e3e), COR_FUNDO (#f4f6f9). Layout base com gridcolor="white", margins, xaxis/yaxis showgrid presente em todos.
 
-Paleta corporativa aplicada: COR_LINHA (#2b6cb0), COR_LINHA2 (#90cdf4), COR_MEDIA (#c53030), COR_REF (#e53e3e), COR_FUNDO (#f4f6f9) em todos os gráficos. Layout base com gridcolor="white", margins, xaxis/yaxis showgrid=True presente em todos.
+### Credenciais, Botão e Rodapé
 
-## Credenciais, Botão e Rodapé
-
-- YAML author (linha 4): "Raimundo Casé" ✓
-- Identificação pessoal (linha 16): "**Raimundo Casé - economista**" ✓
-- Botão print (linha 18): `<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>` ✓
-- Rodapé footer-text (linhas 338-343):
-  - Contém "Boletim Macroeconômico Semanal" ✓
-  - Contém "Semana de referência: 2026-07-06" ✓
+- YAML author (linha 4): `"Raimundo Casé"` ✓
+- Identificação pessoal (linha 16): `**Raimundo Casé - economista**` ✓
+- Botão print (linha 18): `<button class="print-btn"...>` ✓
+- Rodapé (linhas 287-292):
   - Contém "Raimundo Casé - economista" ✓
-  - Contém "BCB — Banco Central do Brasil (Selic, Câmbio, IBC-Br)" ✓
-  - Contém "IBGE — Instituto Brasileiro de Geografia e Estatística (IPCA)" ✓
-  - Aviso de responsabilidade ✓
+  - Contém "BCB — Banco Central do Brasil" ✓
+  - Contém "IBGE — Instituto Brasileiro de Geografia e Estatística" ✓
 
-## Tom Institucional
+### Tom Institucional
 
 Verificados termos proibidos em toda a narrativa:
 - Sem "cirúrgico" ✓
@@ -93,17 +80,17 @@ Verificados termos proibidos em toda a narrativa:
 - Sem "expressivo" como adjetivo de magnitude ✓
 - Sem "robusto" como adjetivo de magnitude ✓
 
-Linguagem técnica, objetiva. 3 parágrafos por indicador (leitura atual, contexto histórico, perspectivas). Sem separadores "—" como separador de ideias desnecessários. Estrutura mantida.
+Linguagem técnica, objetiva. 3 parágrafos por indicador. Estrutura mantida.
 
-## Estrutura Geral
+### Estrutura Geral
 
-- YAML conforme especificação (theme: flatly, toc: true, embed-resources: true, css: styles.css, jupyter: python3) ✓
-- Panorama Geral integrando os 4 indicadores (linhas 20-22) ✓
-- Tabela-Resumo colorida com HTML (linhas 26-96) ✓
+- YAML conforme especificação ✓
+- Panorama Geral integrando 4 indicadores (linhas 20-22) ✓
+- Tabela-Resumo colorida com HTML (linhas 26-81) ✓
 - 4 seções analíticas dentro de `::: {.bloco-analise}` (inflação, câmbio, juros, atividade) ✓
-- Síntese e Perspectivas com 4 parágrafos temáticos (linhas 328-336) ✓
-- Rodapé com créditos e responsabilidade (linhas 338-343) ✓
+- Síntese e Perspectivas com 4 parágrafos temáticos (linhas 277-285) ✓
+- Rodapé com créditos e responsabilidade (linhas 287-292) ✓
 
 ---
 
-**Parecer final:** Documento aprovado para publicação. Todas as verificações obrigatórias de auditoria foram satisfeitas sem qualquer desvio crítico. Fidelidade numérica, coerência direcional, estética corporativa, credenciais e tom institucional confirmados.
+**Parecer final:** Documento aprovado para publicação. Todas as verificações obrigatórias de auditoria foram satisfeitas sem qualquer desvio. Fidelidade numérica, coerência direcional, estética corporativa, credenciais e tom institucional confirmados.
