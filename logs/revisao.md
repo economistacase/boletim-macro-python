@@ -1,153 +1,145 @@
 ok
 
-## Auditoria Técnica — Boletim Macroeconômico Semanal 2026-09-07
+## Relatório de Auditoria — Boletim 2026-09-14 (Segunda Revisão)
 
-**Data da Auditoria:** 2026-09-07  
-**Revisor:** Sistema de Auditoria Técnica  
-**Arquivo Auditado:** `boletim_2026-09-07.qmd`  
-**Arquivo de Referência:** `output/tabelas/resumo.csv`
+**Data da Auditoria:** 2026-09-14  
+**Revisor:** Revisor Técnico Automatizado  
+**Arquivo Auditado:** `boletim_2026-09-14.qmd` (versão corrigida)  
+**Arquivos de Referência:** `output/tabelas/resumo.csv`, `output/tabelas/historico.csv`
 
 ---
 
 ## Resultado Final: ✓ APROVADO
 
-O boletim atende a todos os critérios de auditoria técnica e está pronto para publicação.
+O documento foi corrigido com sucesso. A falha crítica na linha 105 foi resolvida e o boletim atende a todos os critérios de auditoria.
 
 ---
 
-## Detalhamento das Validações
+## 1. Validação da Correção Crítica (Linha 106)
 
-### 1. Fidelidade Numérica
-**Status:** ✓ PERFEITO
+**Status:** ✓ Aprovado
 
-Todos os 14 valores críticos foram comparados com `resumo.csv`:
+**Texto corrigido:**
+```
+O comportamento recente contrasta com a trajetória do primeiro trimestre de 2026, 
+quando o índice chegou a marcar 0,88% em março, o maior valor mensal da série 
+DESDE MARÇO DE 2025.
+```
 
-| Indicador | Métrica | CSV | QMD | Status |
-|-----------|---------|-----|-----|--------|
-| IPCA | valor_atual | 0.07 | "0,07%" | ✓ |
-| IPCA | var_mes | 0.07 | "0,07%" | ✓ |
-| IPCA | var_ano | 3.44 | "3,44%" | ✓ |
-| IPCA | var_12m | 4.44 | "4,44%" | ✓ |
-| Câmbio | valor_atual | 5.13 | "R$ 5,13" | ✓ |
-| Câmbio | var_mes | -1.09 | "-1,09%" | ✓ |
-| Câmbio | var_ano | -6.85 | "6,85% (apreciação)" | ✓ |
-| Câmbio | var_12m | -3.63 | "apreciação de 3,63%" | ✓ |
-| Selic | valor_atual | 14.00 | "14,00%" | ✓ |
-| Selic | var_mes | 0.00 | "0,00 (estável)" | ✓ |
-| Selic | var_ano | -1.00 | "-1,00 p.p." | ✓ |
-| Selic | var_12m | -1.00 | "-1,00 p.p." | ✓ |
-| IBC-Br | valor_atual | 110.22 | "110,22 pontos" | ✓ |
-| IBC-Br | var_mes | -0.64 | "-0,64%" | ✓ |
-| IBC-Br | var_ano | 1.52 | "1,52%" | ✓ |
-| IBC-Br | var_12m | 2.35 | "2,35%" | ✓ |
+**Verificação numérica contra histórico.csv:**
 
-**Resultado:** 16/16 valores reproduzidos com fidelidade.
+| Data | IPCA Mensal | Status |
+|------|-------------|--------|
+| 2025-03-01 | 0,56% | Referência |
+| 2025-04-01 | 0,43% | ✓ < 0,88 |
+| 2025-05-01 | 0,26% | ✓ < 0,88 |
+| 2025-06-01 | 0,24% | ✓ < 0,88 |
+| 2025-07-01 | 0,26% | ✓ < 0,88 |
+| 2025-08-01 | -0,11% | ✓ < 0,88 |
+| 2025-09-01 | 0,48% | ✓ < 0,88 |
+| 2025-10-01 | 0,09% | ✓ < 0,88 |
+| 2025-11-01 | 0,18% | ✓ < 0,88 |
+| 2025-12-01 | 0,33% | ✓ < 0,88 |
+| 2026-01-01 | 0,33% | ✓ < 0,88 |
+| 2026-02-01 | 0,70% | ✓ < 0,88 |
+| 2026-03-01 | 0,88% | Máximo confirmado |
 
----
-
-### 2. Coerência Direcional
-**Status:** ✓ PERFEITO
-
-Auditadas 5 frases comparativas críticas:
-
-| Linha | Frase | Cálculo | Palavra Usada | Verificação |
-|-------|-------|---------|---------------|-------------|
-| 92 | "0,07% **abaixo** dos 0,16%" | 0,07 − 0,16 = −0,09 | abaixo | ✓ correto |
-| 92 | "**desaceleração** na margem" | — | desaceleração | ✓ correto |
-| 92 | "3,44%...patamar **inferior**" | 3,44 − 4,44 = −1,00 | inferior | ✓ correto |
-| 94 | "julho 2026 (0,07%) **abaixo** de julho 2025 (0,26%)" | 0,07 < 0,26 | abaixo | ✓ correto |
-| 149 | "patamar **inferior** a agosto (R$ 5,18)" | 5,13 < 5,18 | inferior | ✓ correto |
-| 240 | "110,22 **inferior** aos 110,93 de maio" | 110,22 − 110,93 = −0,71 | inferior | ✓ correto |
-
-Todas as direções correspondem aos sinais matemáticos. Sem erros factuais ou inversões.
+**Conclusão:** A afirmação está **factualmente correta**. Nenhum mês entre março/2025 e março/2026 excede 0,88%.
 
 ---
 
-### 3. Estética Corporativa — Gráficos
-**Status:** ✓ PERFEITO
+## 2. Verificação de Consistência na Seção de Síntese
 
-Validação contra especificação em `.claude/agents/redator_relatorio.md` seção 6:
+**Status:** ✓ Aprovado
 
-**Gráfico 1 — IPCA (Linhas 100–139)**
-- ✓ Barras mensais + linha de média móvel 3m com `dash="dot"`
-- ✓ `plot_bgcolor=COR_FUNDO`
-- ✓ `fig.show()` presente
-- ✓ Fonte HTML separada após `fig.show()` (linhas 135–139)
-- ✓ Título: "IPCA — Variação Mensal (%) | Últimos 5 Anos"
+**Linha 294 (Síntese):**
+```
+Inflação em desaceleração consistente: o IPCA passou de um pico de 0,88% 
+em março para -0,32% em agosto...
+```
 
-**Gráfico 2 — Câmbio (Linhas 157–182)**
-- ✓ Scatter com `fill="tozeroy"`, `fillcolor="rgba(43,108,176,0.08)"`
-- ✓ **SEM linha de referência** (conforme especificação)
-- ✓ `plot_bgcolor=COR_FUNDO`
-- ✓ `fig.show()` presente
-- ✓ Fonte HTML separada (linhas 178–182)
-- ✓ Título: "Câmbio BRL/USD — Fechamento Mensal | Últimos 5 Anos"
-
-**Gráfico 3 — Selic (Linhas 200–230)**
-- ✓ Linha principal com `shape="hv"` (step)
-- ✓ Linha de referência com `dash="dash"`, cor `COR_REF`
-- ✓ `plot_bgcolor=COR_FUNDO`
-- ✓ `fig.show()` presente
-- ✓ Fonte HTML separada (linhas 226–230)
-- ✓ Título: "Meta Selic — % a.a. | Últimos 5 Anos"
-
-**Gráfico 4 — IBC-Br (Linhas 248–276)**
-- ✓ Duas séries: Original (`COR_LINHA2`, `width=1.5`) e Dessazonalizada (`COR_LINHA`, `width=2.5`)
-- ✓ **SEM linha de referência** (conforme especificação)
-- ✓ `plot_bgcolor=COR_FUNDO`
-- ✓ `fig.show()` presente
-- ✓ Fonte HTML separada (linhas 272–276)
-- ✓ Título: "IBC-Br — Índice de Atividade Econômica | Últimos 5 Anos"
-
-Paleta corporativa (COR_LINHA, COR_MEDIA, COR_REF, COR_FUNDO) aplicada corretamente em todos. Layout base obrigatório presente em 4/4 gráficos. Nenhuma fonte de gráfico dentro de Plotly.
+Apenas menção informativa do pico, sem comparação específica. Coerente com a correção anterior. ✓
 
 ---
 
-### 4. Credenciais e Identidade Corporativa
-**Status:** ✓ PERFEITO
+## 3. Fidelidade Numérica — Tabela de Indicadores
+
+**Status:** ✓ Aprovado
+
+Validação contra `resumo.csv`:
+
+| Indicador | Valor Atual | Data | Var. Mês | Var. Ano | Var. 12m | Status |
+|-----------|-------------|------|----------|----------|----------|--------|
+| IPCA | -0,32% | 2026-08-01 | -0,32% | 3,11% | 4,22% | ✓ |
+| Câmbio | 5,09 BRL/USD | 2026-09-11 | -1,73% | -7,46% | -4,26% | ✓ |
+| Selic | 14,00% a.a. | 2026-09-14 | 0,00% | -1,00% | -1,00% | ✓ |
+| IBC-Br | 110,22 pts | 2026-06-01 | -0,64% | 1,52% | 2,35% | ✓ |
+
+**Resultado:** 4/4 indicadores com valores corretos.
+
+---
+
+## 4. Coerência Direcional — Análise de Narrativa
+
+**Status:** ✓ Aprovado
+
+Auditadas todas as frases com palavras de direção. Amostra validada:
+
+| Linha | Frase | Valores | Operação | Verificação |
+|-------|-------|--------|----------|-------------|
+| 104 | "0,39 pp **abaixo** dos 0,07%" | -0,32 vs 0,07 | -0,32 < 0,07 | ✓ Correto |
+| 104 | "**desaceleração**" | 0,07% → -0,32% | Redução | ✓ Correto |
+| 106 | "**recuou** de forma consistente" | 0,88 → 0,67 → 0,58 → ... → -0,32 | Sequência descendente | ✓ Correto |
+| 161 | "5,09 **abaixo** de 5,1816" | 5,09 < 5,1816 | Queda mês | ✓ Correto |
+| 161 | "**valorização** do real" | Câmbio ↓ | Apreciação | ✓ Correto |
+| 252 | "**recuo** de 0,64%" | 110,22 < 110,93 | Queda mês | ✓ Correto |
+| 294 | "**desaceleração consistente**" | 0,88% > -0,32% | Abrandamento | ✓ Correto |
+| 300 | "**alta** de 2,35%" | +2,35% (12m) | Crescimento | ✓ Correto |
+
+**Resultado:** 8/8 comparações verificadas. Nenhuma inversão de direção.
+
+---
+
+## 5. Estética Corporativa — Gráficos
+
+**Status:** ✓ Aprovado
+
+Todos os 4 gráficos implementados conforme especificação:
+
+- **IPCA (linhas 112–144):** Barras + média móvel 3m, plot_bgcolor, fig.show() ✓
+- **Câmbio (linhas 169–187):** Scatter com fill, sem linha de referência, plot_bgcolor, fig.show() ✓
+- **Selic (linhas 214–235):** Step line + referência tracejada, plot_bgcolor, fig.show() ✓
+- **IBC-Br (linhas 262–281):** Duas séries (original + dessaz.), sem referência, plot_bgcolor, fig.show() ✓
+
+---
+
+## 6. Credenciais, Botão e Rodapé
+
+**Status:** ✓ Aprovado
 
 - ✓ Linha 4: YAML `author: "Raimundo Casé"`
-- ✓ Linha 16: Identidade "**Raimundo Casé - economista**"
-- ✓ Linha 18: Botão `<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>`
-- ✓ Linhas 290–295: Rodapé estruturado com nome, email, fontes (BCB, IBGE) e disclaimer
+- ✓ Linha 16: "**Raimundo Casé - economista**"
+- ✓ Linha 18: Botão print implementado
+- ✓ Linhas 302–307: Rodapé com nome, email, fontes (BCB, IBGE)
 
 ---
 
-### 5. Tom Institucional
-**Status:** ✓ PERFEITO
+## 7. Tom Institucional
 
-- ✓ Termos proibidos ausentes: "cirúrgico", "destrava", "robusto" (magnitude), "pujante", "expressivo" (magnitude)
-- ✓ Separadores "—" não encontrados (uso parcimonioso de pontuação)
-- ✓ Linguagem técnica, objetiva, sem adjetivos exagerados
+**Status:** ✓ Aprovado
 
----
-
-### 6. Estrutura Documental
-**Status:** ✓ PERFEITO
-
-- ✓ YAML completo (título, subtítulo, autor, data, idioma, formato, kernel)
-- ✓ Panorama Geral (1 parágrafo contextualizador, linha 22)
-- ✓ Tabela-Resumo com HTML estilizado e cores condicionais (linhas 26–83)
-- ✓ 4 seções analíticas (IPCA, Câmbio, Selic, IBC-Br) com 3 parágrafos cada
-- ✓ Cada seção envolvida em `::: {.bloco-analise}`
-- ✓ Cada seção contém Análise + Gráfico + Fonte HTML
-- ✓ Síntese e Perspectivas com 4 parágrafos temáticos em negrito (linhas 280–289)
-- ✓ Rodapé com `<div class="footer-text">` (linhas 290–295)
-
----
-
-## Observações Adicionais
-
-**Qualidade Narrativa:** Os três parágrafos por indicador cobrem metodicamente: (1) situação atual com comparações, (2) contexto histórico e fatores explicativos, (3) perspectivas e implicações de política. Estrutura respeitada em todas as 4 seções.
-
-**Precisão dos Cálculos Exibidos:** O texto exibe cálculos explícitos em 4 ocasiões (ex: "0,07 - 0,16 = -0,09", "110,22 - 110,93 = -0,71, ou -0,64%"), todos corretos matematicamente.
-
-**Síntese Integrada:** A seção final conecta os 4 indicadores em uma leitura coerente de cenário macroeconômico (desinflação em curso, câmbio em apreciação, juros contidos, atividade em acomodação).
+Linguagem objetiva e técnica. Ausentes adjetivos exagerados ("cirúrgico", "destrava", "pujante", etc.).
 
 ---
 
 ## Conclusão
 
-✅ **Boletim aprovado para publicação.** Nenhuma correção necessária.
+**✓ APROVADO PARA PUBLICAÇÃO**
 
-Documento está pronto para render em HTML e distribuição institucional.
+Documento pronto. A correção aplicada pelo redator eliminou a falha factual identificada na primeira auditoria. Todos os 5 critérios obrigatórios foram validados com sucesso:
+
+1. ✓ Fidelidade numérica
+2. ✓ Coerência direcional
+3. ✓ Estética corporativa dos gráficos
+4. ✓ Credenciais e identidade
+5. ✓ Tom institucional
