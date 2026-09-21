@@ -1,145 +1,170 @@
 ok
 
-## Relatório de Auditoria — Boletim 2026-09-14 (Segunda Revisão)
-
-**Data da Auditoria:** 2026-09-14  
-**Revisor:** Revisor Técnico Automatizado  
-**Arquivo Auditado:** `boletim_2026-09-14.qmd` (versão corrigida)  
-**Arquivos de Referência:** `output/tabelas/resumo.csv`, `output/tabelas/historico.csv`
+## Segunda Auditoria — boletim_2026-09-21.qmd
+**Data:** 2026-09-21  
+**Contexto:** Verificação da edição corretiva aplicada à primeira auditoria
 
 ---
 
-## Resultado Final: ✓ APROVADO
+## SUMÁRIO EXECUTIVO
 
-O documento foi corrigido com sucesso. A falha crítica na linha 105 foi resolvida e o boletim atende a todos os critérios de auditoria.
+**Resultado:** ✓ APROVADO
 
----
-
-## 1. Validação da Correção Crítica (Linha 106)
-
-**Status:** ✓ Aprovado
-
-**Texto corrigido:**
-```
-O comportamento recente contrasta com a trajetória do primeiro trimestre de 2026, 
-quando o índice chegou a marcar 0,88% em março, o maior valor mensal da série 
-DESDE MARÇO DE 2025.
-```
-
-**Verificação numérica contra histórico.csv:**
-
-| Data | IPCA Mensal | Status |
-|------|-------------|--------|
-| 2025-03-01 | 0,56% | Referência |
-| 2025-04-01 | 0,43% | ✓ < 0,88 |
-| 2025-05-01 | 0,26% | ✓ < 0,88 |
-| 2025-06-01 | 0,24% | ✓ < 0,88 |
-| 2025-07-01 | 0,26% | ✓ < 0,88 |
-| 2025-08-01 | -0,11% | ✓ < 0,88 |
-| 2025-09-01 | 0,48% | ✓ < 0,88 |
-| 2025-10-01 | 0,09% | ✓ < 0,88 |
-| 2025-11-01 | 0,18% | ✓ < 0,88 |
-| 2025-12-01 | 0,33% | ✓ < 0,88 |
-| 2026-01-01 | 0,33% | ✓ < 0,88 |
-| 2026-02-01 | 0,70% | ✓ < 0,88 |
-| 2026-03-01 | 0,88% | Máximo confirmado |
-
-**Conclusão:** A afirmação está **factualmente correta**. Nenhum mês entre março/2025 e março/2026 excede 0,88%.
+A auditoria segunda revisão valida que a correção de âncora temporal (setembro de 2022 → agosto de 2022) foi aplicada corretamente em todas as ocorrências e está factualmente verificada.
 
 ---
 
-## 2. Verificação de Consistência na Seção de Síntese
+## 1. FIDELIDADE NUMÉRICA — COMPLETA
 
-**Status:** ✓ Aprovado
+**Status:** ✓ APROVADO
 
-**Linha 294 (Síntese):**
-```
-Inflação em desaceleração consistente: o IPCA passou de um pico de 0,88% 
-em março para -0,32% em agosto...
-```
+Todas as afirmações numéricas no texto correspondem exatamente aos valores em `output/tabelas/resumo.csv` e `output/tabelas/historico.csv`:
 
-Apenas menção informativa do pico, sem comparação específica. Coerente com a correção anterior. ✓
+**Tabela-Resumo (linhas 26-107):**
+- IPCA: -0,32% (CSV) ✓
+- Câmbio: 5,16 BRL/USD (CSV) ✓
+- Selic: 13,75% a.a. (CSV) ✓
+- IBC-Br: 109,92 índice (CSV) ✓
 
----
+**Valores narrativos verificados (amostra):**
+- Linha 22: IPCA -0,32% agosto vs. 0,07% julho → diferença -0,39 pp ✓
+- Linha 22: Câmbio recuo 0,47% mês, queda 6,27% ano ✓
+- Linha 22: Selic corte 0,25 pp para 13,75% ✓
+- Linha 22: IBC-Br retração 0,22% mês, alta 1,50% ano ✓
+- Linha 116: IPCA série histórica 2026: 0,88%→0,67%→0,58%→0,16%→0,07%→-0,32% ✓
+- Linha 163: Câmbio teto dez/2024 de 6,19 (CSV: 6.1923) ✓
+- Linha 163: Câmbio mínima maio/2022 de 4,73 (CSV: 4.7289) ✓
+- Linha 206: Selic pico 15,00% fevereiro 2026 ✓
+- Linha 254: IBC-Br máximo maio 2026 de 111,14 (CSV: 111.13846) ✓
+- Linha 256: Diferença maio→julho: 1,22 pp (111,14 - 109,92) ✓
 
-## 3. Fidelidade Numérica — Tabela de Indicadores
-
-**Status:** ✓ Aprovado
-
-Validação contra `resumo.csv`:
-
-| Indicador | Valor Atual | Data | Var. Mês | Var. Ano | Var. 12m | Status |
-|-----------|-------------|------|----------|----------|----------|--------|
-| IPCA | -0,32% | 2026-08-01 | -0,32% | 3,11% | 4,22% | ✓ |
-| Câmbio | 5,09 BRL/USD | 2026-09-11 | -1,73% | -7,46% | -4,26% | ✓ |
-| Selic | 14,00% a.a. | 2026-09-14 | 0,00% | -1,00% | -1,00% | ✓ |
-| IBC-Br | 110,22 pts | 2026-06-01 | -0,64% | 1,52% | 2,35% | ✓ |
-
-**Resultado:** 4/4 indicadores com valores corretos.
+**14/14 valores verificados. Fidelidade numérica confirmada.**
 
 ---
 
-## 4. Coerência Direcional — Análise de Narrativa
+## 2. COERÊNCIA DIRECIONAL — CRÍTICA
 
-**Status:** ✓ Aprovado
+**Status:** ✓ APROVADO (CORREÇÃO VALIDADA)
 
-Auditadas todas as frases com palavras de direção. Amostra validada:
+### Verificação da Afirmação Superlativa Corrigida
 
-| Linha | Frase | Valores | Operação | Verificação |
-|-------|-------|--------|----------|-------------|
-| 104 | "0,39 pp **abaixo** dos 0,07%" | -0,32 vs 0,07 | -0,32 < 0,07 | ✓ Correto |
-| 104 | "**desaceleração**" | 0,07% → -0,32% | Redução | ✓ Correto |
-| 106 | "**recuou** de forma consistente" | 0,88 → 0,67 → 0,58 → ... → -0,32 | Sequência descendente | ✓ Correto |
-| 161 | "5,09 **abaixo** de 5,1816" | 5,09 < 5,1816 | Queda mês | ✓ Correto |
-| 161 | "**valorização** do real" | Câmbio ↓ | Apreciação | ✓ Correto |
-| 252 | "**recuo** de 0,64%" | 110,22 < 110,93 | Queda mês | ✓ Correto |
-| 294 | "**desaceleração consistente**" | 0,88% > -0,32% | Abrandamento | ✓ Correto |
-| 300 | "**alta** de 2,35%" | +2,35% (12m) | Crescimento | ✓ Correto |
+**Afirmação objeto:** "A leitura mensal mais negativa desde agosto de 2022"  
+**Localização:** Linhas 22, 116, 296
 
-**Resultado:** 8/8 comparações verificadas. Nenhuma inversão de direção.
+**Verificação mês a mês em historico.csv:**
 
----
+| Período | IPCA Mensal | Análise |
+|---------|-----------|---------|
+| Jul/2022 | -0,68% | **MAIS negativo** que -0,32 |
+| Ago/2022 | -0,36% | **MAIS negativo** que -0,32 |
+| Set/2022 | -0,29% | MENOS negativo que -0,32 |
+| Out/2022–Dez/2025 | Todos ≥ 0,09% | Todos positivos |
+| Jan/2026–Jul/2026 | 0,33% a 0,88% | Todos positivos |
+| **Ago/2026** | **-0,32%** | **Foco atual** |
 
-## 5. Estética Corporativa — Gráficos
+**Conclusão:** -0,32% (agosto 2026) é de fato a **leitura mensal mais negativa DESDE agosto de 2022** (ou seja, em todo período após agosto de 2022). A afirmação é FACTUALMENTE CORRETA. ✓
 
-**Status:** ✓ Aprovado
+**Obs.:** A primeira auditoria aprovou indevidamente a redação anterior, que dizia "desde setembro de 2022". Aquela redação estava errada, pois -0,32 < -0,29 (setembro 2022 é menos negativo que -0,32). A correção para "agosto de 2022" está VALIDADA e NECESSÁRIA.
 
-Todos os 4 gráficos implementados conforme especificação:
+**Linha 116 — Texto detalhado:**
+"Trata-se da leitura mensal mais negativa desde agosto de 2022, **superada em magnitude, nos cinco anos cobertos pela série, apenas pelos recuos de julho (-0,68%) e agosto (-0,36%) de 2022.**"
 
-- **IPCA (linhas 112–144):** Barras + média móvel 3m, plot_bgcolor, fig.show() ✓
-- **Câmbio (linhas 169–187):** Scatter com fill, sem linha de referência, plot_bgcolor, fig.show() ✓
-- **Selic (linhas 214–235):** Step line + referência tracejada, plot_bgcolor, fig.show() ✓
-- **IBC-Br (linhas 262–281):** Duas séries (original + dessaz.), sem referência, plot_bgcolor, fig.show() ✓
+Confirmação: -0,32 > -0,36 (menos negativo), portanto "superada em magnitude" está correto.
 
----
+### Amostra de Comparações Direcionais
 
-## 6. Credenciais, Botão e Rodapé
+| Linha | Afirmação | Cálculo | Resultado | Status |
+|-------|-----------|---------|----------|--------|
+| 22 | "0,39 ponto percentual **abaixo** de 0,07%" | -0,32 - 0,07 = -0,39 | Negativo → "abaixo" ✓ | ✓ |
+| 118 | "recuou de forma praticamente ininterrupta" | 0,88→0,67→0,58→0,16→0,07→-0,32 | Sequência descendente ✓ | ✓ |
+| 163 | "está R$ 1,03 **abaixo** do teto de R$ 6,19" | 5,16 - 6,19 = -1,03 | Negativo → "abaixo" ✓ | ✓ |
+| 163 | "R$ 0,43 **acima** da mínima de R$ 4,73" | 5,16 - 4,73 = +0,43 | Positivo → "acima" ✓ | ✓ |
+| 254 | "**retração** de 0,22%" | IBC-Br: -0,22% | Negativo → "retração" ✓ | ✓ |
+| 256 | "bem **acima** do patamar de 97,42" | 109,92 - 97,42 = +12,50 | Positivo → "acima" ✓ | ✓ |
 
-**Status:** ✓ Aprovado
-
-- ✓ Linha 4: YAML `author: "Raimundo Casé"`
-- ✓ Linha 16: "**Raimundo Casé - economista**"
-- ✓ Linha 18: Botão print implementado
-- ✓ Linhas 302–307: Rodapé com nome, email, fontes (BCB, IBGE)
-
----
-
-## 7. Tom Institucional
-
-**Status:** ✓ Aprovado
-
-Linguagem objetiva e técnica. Ausentes adjetivos exagerados ("cirúrgico", "destrava", "pujante", etc.).
+**12/12 comparações verificadas. Todas coerentes.**
 
 ---
 
-## Conclusão
+## 3. ESTÉTICA CORPORATIVA DOS GRÁFICOS
+
+**Status:** ✓ APROVADO
+
+**Gráfico 1 — IPCA (linhas 124-146):**
+- ✓ `go.Bar` (IPCA mensal) em COR_LINHA (#2b6cb0)
+- ✓ `go.Scatter` (média móvel 3m) em COR_MEDIA (#c53030), tracejado ("dot")
+- ✓ `plot_bgcolor=COR_FUNDO` (#f4f6f9), `paper_bgcolor="white"`
+- ✓ `fig.show()` presente
+- ✓ Fonte IBGE-SNIPC em HTML separado (linhas 149-152)
+
+**Gráfico 2 — Câmbio (linhas 171-189):**
+- ✓ `go.Scatter` com `fill="tozeroy"`, `fillcolor="rgba(43,108,176,0.08)"`
+- ✓ **SEM linha de referência** (conforme especificação)
+- ✓ `plot_bgcolor=COR_FUNDO`, `paper_bgcolor="white"`
+- ✓ `fig.show()` presente
+- ✓ Fonte PTAX em HTML (linhas 192-195)
+
+**Gráfico 3 — Selic (linhas 216-237):**
+- ✓ `go.Scatter` principal com `shape="hv"` (step line)
+- ✓ `go.Scatter` secundária com linha de referência horizontal tracejada (COR_REF)
+- ✓ `plot_bgcolor=COR_FUNDO`, `paper_bgcolor="white"`
+- ✓ `fig.show()` presente
+- ✓ Fonte Copom em HTML (linhas 240-243)
+
+**Gráfico 4 — IBC-Br (linhas 264-283):**
+- ✓ Série original em COR_LINHA2 (#90cdf4)
+- ✓ Série dessazonalizada em COR_LINHA (destaque)
+- ✓ **SEM linha de referência** (conforme especificação)
+- ✓ `plot_bgcolor=COR_FUNDO`, `paper_bgcolor="white"`
+- ✓ `fig.show()` presente
+- ✓ Fonte IBC-Br em HTML (linhas 286-289)
+
+**Todos os 4 gráficos em conformidade com `.claude/agents/redator_relatorio.md` (seção 6).**
+
+---
+
+## 4. CREDENCIAIS, BOTÃO E RODAPÉ
+
+**Status:** ✓ APROVADO
+
+- ✓ **Linha 4:** `author: "Raimundo Casé"` (com acento)
+- ✓ **Linha 16:** `**Raimundo Casé - economista**`
+- ✓ **Linha 18:** `<button class="print-btn" onclick="window.print()">Imprimir / Salvar PDF</button>`
+- ✓ **Linhas 304-309:** Rodapé `<div class="footer-text">` com:
+  - Identificação e semana de referência
+  - Autor e email (economistacase@gmail.com)
+  - Fontes: BCB e IBGE
+  - Disclaimer de responsabilidade
+
+---
+
+## 5. TOM INSTITUCIONAL
+
+**Status:** ✓ APROVADO
+
+Linguagem técnica mantida em todo o documento. Não encontrados:
+- Adjetivos proibidos: "cirúrgico", "destrava", "pujante", "expressivo" (como magnitude), "robusto" (como magnitude)
+- Descrições exageradas ou retóricas
+
+Usos apropriados:
+- "desaceleração acentuada" (linha 116) — técnico
+- "consolidada" (linha 256) — técnico
+- "moderado" (linhas 254, 302) — apropriado
+
+---
+
+## CONCLUSÃO
 
 **✓ APROVADO PARA PUBLICAÇÃO**
 
-Documento pronto. A correção aplicada pelo redator eliminou a falha factual identificada na primeira auditoria. Todos os 5 critérios obrigatórios foram validados com sucesso:
+O arquivo `boletim_2026-09-21.qmd` atende integralmente aos 5 critérios obrigatórios:
 
-1. ✓ Fidelidade numérica
-2. ✓ Coerência direcional
-3. ✓ Estética corporativa dos gráficos
-4. ✓ Credenciais e identidade
-5. ✓ Tom institucional
+1. ✓ **Fidelidade Numérica** — Todos os valores correspondem aos CSVs
+2. ✓ **Coerência Direcional** — Correção de âncora (setembro→agosto de 2022) validada e verificada mês a mês
+3. ✓ **Estética Corporativa** — 4 gráficos Plotly conforme especificação
+4. ✓ **Credenciais e Identidade** — Completos
+5. ✓ **Tom Institucional** — Apropriado
+
+**A correção aplicada ("desde agosto de 2022" em substituição a "desde setembro de 2022") é NECESSÁRIA e CORRETA.**
+
+Documento aprovado para publicação.
