@@ -9,6 +9,7 @@ Gera 5 arquivos CSV em output/dados/:
 """
 
 import sys
+import time
 import urllib.request
 import json
 import csv
@@ -26,12 +27,16 @@ def fetch_bcb(serie_id: int, data_inicio: str, data_fim: str) -> list[dict]:
         f"?formato=json&dataInicial={data_inicio}&dataFinal={data_fim}"
     )
     req = urllib.request.Request(url, headers={"User-Agent": "BoletimMacro/1.0"})
-    try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except Exception as e:
-        print(f"  AVISO: Falha ao buscar série {serie_id}: {e}", file=sys.stderr)
-        return []
+    # A API do BCB tem timeouts esporadicos: tenta ate 4 vezes antes de desistir
+    for tentativa in range(1, 5):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except Exception as e:
+            print(f"  AVISO: Falha ao buscar série {serie_id} (tentativa {tentativa}/4): {e}", file=sys.stderr)
+            if tentativa < 4:
+                time.sleep(15 * tentativa)
+    return []
 
 
 def save_csv(rows: list[dict], filename: str, fieldnames: list[str]):
