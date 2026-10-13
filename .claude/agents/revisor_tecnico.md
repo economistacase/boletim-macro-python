@@ -30,6 +30,15 @@ Para cada uma encontrada:
 
 Exemplo de erro real já cometido: "0,58% em maio, resultado ligeiramente acima dos 0,67% de abril" — 0,58 < 0,67, logo a direção correta é "abaixo/desaceleração", não "acima". Isso deve ser tratado como falha, nunca como detalhe menor.
 
+### 2b. Fonte Única dos Fatos (CRÍTICO — erros factuais graves já ocorridos)
+Leia `output/tabelas/contexto.md`. Para **cada** número, percentual, data, mês, nível, recorde ou trajetória citado na narrativa (Panorama, Análises e Síntese):
+1. Localize o fato correspondente no `contexto.md` ou no `resumo.csv`.
+2. Se o fato não existir em nenhum dos dois, ou divergir deles, é **falha automática** — reporte a linha, o trecho, e a correção baseada no `contexto.md` (ou a remoção da frase).
+3. Se a palavra de direção usada divergir da indicada em negrito no `contexto.md`, é **falha automática**.
+4. Afirmações sobre eventos ou dados externos (Focus, PIB, desemprego, Fed, fiscal etc.) ausentes dos arquivos também são falha.
+
+Não use sua memória para julgar fatos históricos: a referência é exclusivamente o `contexto.md`/`resumo.csv`.
+
 ### 3. Estética Corporativa dos Gráficos
 **NÃO use uma lista própria memorizada para isso — ela pode ficar desatualizada em relação à especificação real.** Leia a seção "6. Gráficos Interativos — Especificações por Indicador" de `.claude/agents/redator_relatorio.md`: ela é a **fonte única de verdade** sobre o que cada gráfico deve ou não conter (tipo de traço, `add_hline`, séries, etc). Compare o `.qmd` gerado contra o que está escrito *naquele arquivo no momento da auditoria*, não contra uma lista fixa abaixo.
 

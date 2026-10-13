@@ -3,7 +3,8 @@ Analise Quantitativa - Boletim Macroeconomico
 Uso: python python/analise.py [DATA_REFERENCIA]
      DATA_REFERENCIA (YYYY-MM-DD) padrao: data atual. Usada apenas como corte
      dos 5 anos do historico.csv.
-Gera: output/tabelas/resumo.csv e output/tabelas/historico.csv
+Gera: output/tabelas/resumo.csv, output/tabelas/historico.csv e
+      output/tabelas/contexto.md (fatos historicos ja calculados para o redator)
 """
 
 import sys
@@ -325,6 +326,146 @@ historico = historico.sort_values(["indicador", "data"]).reset_index(drop=True)
 historico_path = os.path.join(TABELAS_DIR, "historico.csv")
 historico.to_csv(historico_path, index=False)
 print(f"Gravado: {historico_path}")
+
+# ---------------------------------------------------------------------------
+# Montagem do contexto.md
+# Fatos historicos ja calculados (com a direcao de cada comparacao) para o
+# redator citar sem fazer contas nem recorrer a memoria. Toda afirmacao
+# historica do boletim deve sair daqui, do resumo.csv ou do historico.csv.
+# ---------------------------------------------------------------------------
+MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho",
+         "agosto", "setembro", "outubro", "novembro", "dezembro"]
+
+
+def fmt(v, casas=2):
+    return f"{v:.{casas}f}".replace(".", ",")
+
+
+def mes_ano(d):
+    return f"{MESES[d.month - 1]}/{d.year}"
+
+
+def dia_mes_ano(d):
+    return f"{d.day:02d}/{d.month:02d}/{d.year}"
+
+
+def direcao(diff, alta="alta", queda="queda", estavel="estável"):
+    d = round(diff, 2)
+    return alta if d > 0 else queda if d < 0 else estavel
+
+
+def cmp_txt(atual, anterior, sufixo="", alta="alta", queda="queda", unid_diff="p.p."):
+    # diferenca calculada sobre os valores ja arredondados, para o texto ser conferivel
+    atual, anterior = round(atual, 2), round(anterior, 2)
+    diff = atual - anterior
+    return (f"{fmt(atual)}{sufixo} vs. {fmt(anterior)}{sufixo} → diferença "
+            f"{'+' if diff >= 0 else ''}{fmt(diff)} {unid_diff} → **{direcao(diff, alta, queda)}**")
+
+
+ctx = [f"# Contexto histórico calculado — referência {DATA_REF.strftime('%Y-%m-%d')}", "",
+       "Fatos gerados por `python/analise.py` a partir das séries oficiais. "
+       "A direção de cada comparação já está calculada: use exatamente a palavra indicada.", ""]
+
+# --- IPCA ---
+ipca_s = ipca_clean.set_index("data")["valor"]
+ipca_12m_s = ((1 + ipca_s / 100).rolling(12).apply(np.prod, raw=True) - 1) * 100
+d_ant = ipca_s.index[-2]
+ctx += ["## IPCA", "",
+        f"- Mês de referência: {mes_ano(ipca_atual_data)}.",
+        f"- Variação mensal {mes_ano(ipca_atual_data)} vs. {mes_ano(d_ant)}: "
+        + cmp_txt(ipca_s.iloc[-1], ipca_s.iloc[-2], "%", "aceleração", "desaceleração"),
+        f"- Acumulado em 12 meses {mes_ano(ipca_atual_data)} vs. {mes_ano(d_ant)}: "
+        + cmp_txt(ipca_12m_s.iloc[-1], ipca_12m_s.iloc[-2], "%", "alta", "queda")]
+d_12 = ipca_atual_data - pd.DateOffset(years=1)
+if d_12 in ipca_s.index:
+    ctx.append(f"- Variação mensal {mes_ano(ipca_atual_data)} vs. mesmo mês de {d_12.year} "
+               f"({mes_ano(d_12)}): " + cmp_txt(ipca_s.iloc[-1], ipca_s[d_12], "%", "maior", "menor"))
+# Meta de inflacao do CMN (regime de meta continua desde 2025): 3,0% +/- 1,5 p.p.
+v12 = ipca_12m_s.iloc[-1]
+pos_meta = "acima do teto (4,50%)" if v12 > 4.5 else "abaixo do piso (1,50%)" if v12 < 1.5 else "dentro do intervalo de tolerância (1,50% a 4,50%)"
+ctx.append(f"- Meta de inflação (CMN, meta contínua): 3,00% com tolerância de 1,5 p.p. "
+           f"O acumulado em 12 meses ({fmt(v12)}%) está **{pos_meta}**.")
+s5 = ipca_12m_s[ipca_12m_s.index >= corte].dropna()
+ctx += [f"- Acumulado em 12 meses nos últimos 5 anos: máximo {fmt(s5.max())}% ({mes_ano(s5.idxmax())}), "
+        f"mínimo {fmt(s5.min())}% ({mes_ano(s5.idxmin())}).", "",
+        "| Mês | Variação mensal (%) | Acumulado 12 meses (%) |", "|---|---|---|"]
+for d in ipca_s.index[-12:]:
+    ctx.append(f"| {mes_ano(d)} | {fmt(ipca_s[d])} | {fmt(ipca_12m_s[d])} |")
+ctx.append("")
+
+# --- Selic ---
+sel = selic_clean.set_index("data")["valor"]
+mudancas = sel[sel.diff().fillna(0) != 0]
+ctx += ["## Selic (Meta, % a.a.)", "", f"- Nível atual: {fmt(selic_atual_val)}% a.a."]
+if not mudancas.empty:
+    d_ult = mudancas.index[-1]
+    nivel_ant = sel[sel.index < d_ult].iloc[-1]
+    ctx.append(f"- Vigente desde {dia_mes_ano(d_ult)}; nível anterior {fmt(nivel_ant)}% → "
+               f"última decisão foi de **{direcao(mudancas.iloc[-1] - nivel_ant, 'alta', 'corte')}** "
+               f"de {fmt(abs(mudancas.iloc[-1] - nivel_ant))} p.p.")
+else:
+    ctx.append(f"- Sem mudanças desde o início da série ({dia_mes_ano(sel.index[0])}).")
+ctx += [f"- Início do ano corrente ({selic_atual_data.year}): {fmt(selic_ini_ano_val)}% → hoje: "
+        + cmp_txt(selic_atual_val, selic_ini_ano_val, "%", "alta", "queda"),
+        f"- 12 meses atrás ({mes_ano(data_12m_atras)}): " + cmp_txt(selic_atual_val, selic_12m_val, "%", "alta", "queda")]
+s5 = sel[sel.index >= corte]
+d_max = s5[s5 == s5.max()].index
+ctx += [f"- Últimos 5 anos: máximo {fmt(s5.max())}% (primeira vez em {dia_mes_ano(d_max[0])}, "
+        f"último dia em {dia_mes_ano(d_max[-1])}), mínimo {fmt(s5.min())}% (último dia em "
+        f"{dia_mes_ano(s5[s5 == s5.min()].index[-1])}).", "",
+        "Trajetória completa da Meta Selic nos últimos 5 anos (cada linha = nova decisão do Copom em vigor):", "",
+        "| Vigente desde | Nível (% a.a.) | Mudança (p.p.) |", "|---|---|---|",
+        f"| {dia_mes_ano(s5.index[0])} (início da janela) | {fmt(s5.iloc[0])} | — |"]
+for d, v in mudancas[mudancas.index >= corte].items():
+    ant = sel[sel.index < d].iloc[-1]
+    ctx.append(f"| {dia_mes_ano(d)} | {fmt(v)} | {'+' if v > ant else ''}{fmt(v - ant)} |")
+ctx.append("")
+
+# --- Cambio ---
+ctx += ["## Câmbio (BRL/USD, PTAX)", "",
+        f"- Último fechamento: {fmt(cambio_atual_val, 4)} em {dia_mes_ano(cambio_atual_data)}.",
+        f"- Vs. fim do mês anterior ({fmt(cambio_mes_ant_val, 4)}): variação {fmt(var_mes_cambio)}% → "
+        f"real **{direcao(var_mes_cambio, 'se desvalorizou', 'se valorizou')}**.",
+        f"- Vs. fim de dezembro/{ano_ant} ({fmt(cambio_dez_val, 4)}): variação {fmt(var_ano_cambio)}% → "
+        f"real **{direcao(var_ano_cambio, 'se desvalorizou', 'se valorizou')}** no ano.",
+        f"- Vs. {mes_ano(pd.Timestamp(mes_12m_ano, mes_12m_mes, 1))} ({fmt(cambio_12m_val, 4)}): variação "
+        f"{fmt(var_12m_cambio)}% → real **{direcao(var_12m_cambio, 'se desvalorizou', 'se valorizou')}** em 12 meses."]
+s5 = cambio_clean[cambio_clean["data"] >= corte].set_index("data")["valor"]
+ctx += [f"- Últimos 5 anos (diário): máximo {fmt(s5.max(), 4)} ({dia_mes_ano(s5.idxmax())}), "
+        f"mínimo {fmt(s5.min(), 4)} ({dia_mes_ano(s5.idxmin())}).", "",
+        "| Fim do mês | BRL/USD |", "|---|---|"]
+for _, r in cambio_h.dropna().tail(7).iterrows():
+    parcial = f" (parcial, até {dia_mes_ano(cambio_atual_data)})" if r["data"] >= cambio_atual_data else ""
+    ctx.append(f"| {mes_ano(r['data'])}{parcial} | {fmt(r['valor'], 4)} |")
+ctx.append("")
+
+# --- IBC-Br ---
+sa = ibc_sa_clean.set_index("data")["valor"]
+orig = ibc_orig_clean.set_index("data")["valor"]
+ctx += ["## IBC-Br", "",
+        "- ATENÇÃO À METODOLOGIA: a variação mensal usa a série **dessazonalizada**; "
+        "as variações no ano e em 12 meses usam a série **original** (sem ajuste). "
+        "Não aplique as variações no ano/12 meses ao nível dessazonalizado.",
+        f"- Mês de referência: {mes_ano(ibc_sa_atual_data)}. Nível dessazonalizado: {fmt(ibc_sa_atual_val)}.",
+        f"- Mensal (dessaz.) vs. {mes_ano(sa.index[-2])}: variação {fmt(var_mes_ibc)}% → **{direcao(var_mes_ibc, 'alta', 'queda')}**.",
+        f"- 12 meses (original, {mes_ano(ibc_orig_ultima_data)} vs. mesmo mês de {ibc_orig_ultima_data.year - 1}): "
+        f"variação {fmt(var_12m_ibc)}% → **{direcao(var_12m_ibc, 'crescimento', 'retração')}**.",
+        f"- No ano (original, média jan–{MESES[mes_ibc - 1][:3]}/{ano_ibc} vs. média jan–{MESES[mes_ibc - 1][:3]}/{ano_ibc - 1}): "
+        f"variação {fmt(var_ano_ibc)}% → **{direcao(var_ano_ibc, 'crescimento', 'retração')}**."]
+s5 = sa[sa.index >= corte]
+ctx += [f"- Últimos 5 anos (dessaz.): máximo {fmt(s5.max())} ({mes_ano(s5.idxmax())}), "
+        f"mínimo {fmt(s5.min())} ({mes_ano(s5.idxmin())}). Nível atual está "
+        f"{fmt((ibc_sa_atual_val / s5.max() - 1) * 100)}% em relação ao máximo.", "",
+        "| Mês | Dessaz. | Var. mensal dessaz. (%) | Original |", "|---|---|---|---|"]
+var_sa = sa.pct_change() * 100
+for d in sa.index[-7:]:
+    ctx.append(f"| {mes_ano(d)} | {fmt(sa[d])} | {fmt(var_sa[d])} | {fmt(orig.get(d, np.nan))} |")
+ctx.append("")
+
+contexto_path = os.path.join(TABELAS_DIR, "contexto.md")
+with open(contexto_path, "w", encoding="utf-8") as f:
+    f.write("\n".join(ctx))
+print(f"Gravado: {contexto_path}")
 
 # ---------------------------------------------------------------------------
 # Resumo no terminal

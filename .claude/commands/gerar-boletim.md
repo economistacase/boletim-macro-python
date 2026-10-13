@@ -5,7 +5,7 @@ Coordene a geração do Boletim Macro Semanal. A data de referência é `$ARGUME
 
 ## Sequência de Execução
 1. Execute `python python/coleta.py` diretamente via Bash (não existe subagente para esta etapa — coleta.py é um script fixo e determinístico). Aguarde a confirmação de que os 5 arquivos brutos estão em `output/dados/`.
-2. Chame o subagente `analista_quant`. Aguarde a confirmação de que `resumo.csv` e `historico.csv` foram gerados.
+2. Chame o subagente `analista_quant`. Aguarde a confirmação de que `resumo.csv`, `historico.csv` e `contexto.md` foram gerados.
 3. Chame o subagente `redator_relatorio` passando a data `$ARGUMENTS`. Ele deve gerar o `boletim_<DATA>.qmd`.
 4. Chame o subagente `revisor_tecnico`. Leia a primeira linha do log que ele gerar.
 5. Ponto de Decisão:

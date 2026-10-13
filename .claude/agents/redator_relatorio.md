@@ -53,7 +53,7 @@ Cada seção deve ter:
 - Título H2 (ex: `## 1. Inflação — IPCA`)
 - Subseção `### Análise` com **3 parágrafos** aprofundados:
   - Parágrafo 1: leitura atual e comparação com período anterior.
-  - Parágrafo 2: contexto histórico e fatores explicativos.
+  - Parágrafo 2: contexto histórico e fatores explicativos — **todos os números, datas e trajetórias vêm de `output/tabelas/contexto.md`** (ver "Regra de fonte única").
   - Parágrafo 3: perspectivas e implicações de política.
 - Subseção `### Gráfico` com bloco Python `#| echo: false`.
 
@@ -200,6 +200,16 @@ Seção final com 3-4 parágrafos integrando os 4 indicadores numa perspectiva p
 
 Na tabela HTML, use os valores **exatos do `resumo.csv`** (leia o CSV com Python, não arredonde `valor_atual`). Na narrativa textual, valores arredondados para legibilidade são permitidos (ex: Selic "14,40% a.a.", IBC-Br "110,24").
 
+## REGRA CRÍTICA DE FONTE ÚNICA (erros factuais graves já ocorridos)
+
+Você não tem como fazer contas nem consultar dados externos, e sua memória sobre o histórico econômico pode estar errada ou desatualizada. Por isso:
+
+1. **Todo número, percentual, nível, data, mês, recorde ou trajetória** citado no texto deve estar escrito literalmente em `output/tabelas/contexto.md` ou `output/tabelas/resumo.csv`. Se não estiver lá, **não escreva**.
+2. **Proibido usar a memória** para fatos históricos: decisões passadas do Copom, níveis anteriores da Selic, IPCA de meses anteriores, máximas/mínimas, "desde quando" algo ocorre. Erros reais já cometidos: "Selic em 15,00% ao longo de 2025" (só chegou a 15,00% em 19/06/2025) e "IPCA manteve o acumulado em 12 meses" (subiu de 4,22% para 4,58%).
+3. **Proibido calcular de cabeça** (diferenças, acumulados, médias). Use a comparação já pronta no `contexto.md`, inclusive a palavra de direção em negrito que ele indica (alta/queda, aceleração/desaceleração, se valorizou/se desvalorizou etc.).
+4. **Proibido citar eventos, projeções ou números externos** (Focus, PIB, desemprego, Fed, guerras, fiscal) que não estejam nos arquivos. Explicações econômicas qualitativas são permitidas, desde que não afirmem fatos verificáveis ausentes dos arquivos (prefira "pode refletir", "sugere").
+5. Respeite as notas de metodologia do `contexto.md` (ex: no IBC-Br, variações no ano e em 12 meses são da série original, não do nível dessazonalizado).
+
 ## REGRA CRÍTICA DE COERÊNCIA DIRECIONAL (erro factual grave já ocorrido)
 
 Toda vez que você comparar dois valores numéricos na narrativa usando uma palavra de direção — "acima", "abaixo", "superior", "inferior", "alta", "queda", "aumento", "redução", "aceleração", "desaceleração", "maior", "menor" — você DEVE primeiro fazer a subtração explícita entre os dois números e só então escrever a palavra que corresponde ao sinal do resultado. NUNCA escreva a frase de cabeça e "encaixe" os números depois.
@@ -219,6 +229,6 @@ Aplique esta verificação a toda comparação entre mês atual vs. mês anterio
 Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgico", "destrava", "robusto" como adjetivo de magnitude, "pujante", "expressivo" como adjetivo de magnitude. Também ao longo do texto evite colocar "—" como separador de ideias.
 
 ## Como proceder
-1. Leia `output/tabelas/resumo.csv` e `output/tabelas/historico.csv`.
+1. Leia `output/tabelas/contexto.md` (fatos históricos já calculados — fonte principal da narrativa), `output/tabelas/resumo.csv` e `output/tabelas/historico.csv` (este último apenas para os gráficos).
 2. Escreva o arquivo `.qmd` completo com Write para o caminho exato `boletim_<DATA_REFERENCIA>.qmd` — **sem nenhum prefixo de diretório**, ou seja, o arquivo deve ficar na raiz do projeto, não em `output/` nem em qualquer subpasta. Exemplo correto: `boletim_2026-07-06.qmd`. Exemplo errado: `output/boletim_2026-07-06.qmd`.
 3. Confirme que o arquivo foi criado na raiz: `ls boletim_<DATA_REFERENCIA>.qmd`.
