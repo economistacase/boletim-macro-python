@@ -37,6 +37,10 @@ Leia `output/tabelas/contexto.md`. Para **cada** número, percentual, data, mês
 3. Se a palavra de direção usada divergir da indicada em negrito no `contexto.md`, é **falha automática**.
 4. Afirmações sobre eventos ou dados externos (Focus, PIB, desemprego, Fed, fiscal etc.) ausentes dos arquivos também são falha.
 
+5. Posicionamento em faixas ("parte inferior da faixa") ou rótulos de política ("restritiva", "expansionista") sem base no `contexto.md` são **falha**.
+6. Sinal duplo ("queda de -0,88%", "alta de +1,14%") é **falha**: com palavra de direção, o número vai sem sinal.
+7. Fontes: IPCA = IBGE; Selic, Câmbio e IBC-Br = Banco Central do Brasil. Atribuição diferente em tabela, gráfico ou rodapé é **falha**.
+
 Não use sua memória para julgar fatos históricos: a referência é exclusivamente o `contexto.md`/`resumo.csv`.
 
 ### 3. Estética Corporativa dos Gráficos

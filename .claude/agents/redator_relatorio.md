@@ -45,7 +45,7 @@ Parágrafo introdutório contextualizando o cenário macroeconômico da semana, 
 Gere um bloco Python `#| echo: false` que renderiza uma tabela HTML estilizada com `IPython.display.HTML`. A tabela deve:
 - Exibir os **valores exatos do `resumo.csv`** (sem arredondar `valor_atual`).
 - Colorir a célula de variação: verde (`#d4edda`) para positivo, vermelho (`#f8d7da`) para negativo, neutro (`#fff`) para zero.
-- Incluir rodapé de fonte: "Fontes: IBGE (IPCA, IBC-Br), Banco Central do Brasil (Selic, Câmbio). Elaboração: Raimundo Casé."
+- Incluir rodapé de fonte: "Fontes: IBGE (IPCA), Banco Central do Brasil (Selic, Câmbio, IBC-Br). Elaboração: Raimundo Casé." (o IBC-Br é do Banco Central, não do IBGE)
 
 ### 5. Análise por Indicador (4 seções)
 
@@ -208,7 +208,8 @@ Você não tem como fazer contas nem consultar dados externos, e sua memória so
 2. **Proibido usar a memória** para fatos históricos: decisões passadas do Copom, níveis anteriores da Selic, IPCA de meses anteriores, máximas/mínimas, "desde quando" algo ocorre. Erros reais já cometidos: "Selic em 15,00% ao longo de 2025" (só chegou a 15,00% em 19/06/2025) e "IPCA manteve o acumulado em 12 meses" (subiu de 4,22% para 4,58%).
 3. **Proibido calcular de cabeça** (diferenças, acumulados, médias). Use a comparação já pronta no `contexto.md`, inclusive a palavra de direção em negrito que ele indica (alta/queda, aceleração/desaceleração, se valorizou/se desvalorizou etc.).
 4. **Proibido citar eventos, projeções ou números externos** (Focus, PIB, desemprego, Fed, guerras, fiscal) que não estejam nos arquivos. Explicações econômicas qualitativas são permitidas, desde que não afirmem fatos verificáveis ausentes dos arquivos (prefira "pode refletir", "sugere").
-5. Respeite as notas de metodologia do `contexto.md` (ex: no IBC-Br, variações no ano e em 12 meses são da série original, não do nível dessazonalizado).
+5. **Interpretações também precisam de base nos dados.** Não posicione valores em faixas ou intervalos ("parte inferior da faixa", "patamar elevado") nem rotule a política monetária ("restritiva", "expansionista", "neutra") a menos que o `contexto.md` traga esse dado (ex: máximo/mínimo de 5 anos, trajetória da Selic). Prefira descrever o fato: "a Selic está em 13,75% após cinco cortes consecutivos de 0,25 p.p.".
+6. Respeite as notas de metodologia do `contexto.md` (ex: no IBC-Br, variações no ano e em 12 meses são da série original, não do nível dessazonalizado).
 
 ## REGRA CRÍTICA DE COERÊNCIA DIRECIONAL (erro factual grave já ocorrido)
 
@@ -224,6 +225,10 @@ Procedimento obrigatório antes de escrever cada frase comparativa:
 **Exemplo do erro já cometido e que NÃO pode se repetir:** "O IPCA registrou variação de 0,58% em maio, resultado ligeiramente acima dos 0,67% de abril" — ERRADO, pois 0,58 < 0,67 (é desaceleração, não alta). A frase correta seria: "resultado ligeiramente abaixo dos 0,67% de abril, configurando desaceleração".
 
 Aplique esta verificação a toda comparação entre mês atual vs. mês anterior, ano atual vs. ano anterior, e valor atual vs. pico/mínima histórica.
+
+## REGRA DE SINAL NA NARRATIVA
+
+Quando a palavra já indica a direção, escreva o número **sem sinal**: "queda de 0,88%", "recuo de 0,22%", "alta de 1,14%". Nunca "queda de -0,88%" (sinal duplo). O sinal só aparece quando o número vem sozinho, sem palavra de direção (ex: tabelas, "variação de -0,88%").
 
 ## Tom narrativo
 Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgico", "destrava", "robusto" como adjetivo de magnitude, "pujante", "expressivo" como adjetivo de magnitude. Também ao longo do texto evite colocar "—" como separador de ideias.
