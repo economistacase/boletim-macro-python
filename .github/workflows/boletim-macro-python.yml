@@ -58,7 +58,10 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
       - name: Instalar Claude Code
-        run: npm install -g @anthropic-ai/claude-code
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/claude" --version
 
       - name: Criar diretórios necessários
         run: mkdir -p logs output/dados output/tabelas charts
@@ -67,6 +70,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          set -o pipefail   # falha do claude não pode ser mascarada pelo tee
           DATA="${{ github.event.inputs.data_ref }}"
           if [ -z "$DATA" ]; then DATA=$(date -u +%F); fi
           echo "DATA=$DATA" >> "$GITHUB_ENV"
