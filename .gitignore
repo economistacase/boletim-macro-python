@@ -34,3 +34,4 @@ venv/
 # Segredos — NUNCA commitar
 .env
 *.key
+api.txt

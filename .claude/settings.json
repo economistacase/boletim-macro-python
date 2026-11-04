@@ -26,7 +26,13 @@
     "deny": [
       "Bash(rm:*)",
       "Bash(sudo:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Write(**/coleta.py)",
+      "Edit(**/coleta.py)",
+      "Write(**/analise.py)",
+      "Edit(**/analise.py)",
+      "Write(**/gerar_pdf.py)",
+      "Edit(**/gerar_pdf.py)"
     ]
   },
   "hooks": {
