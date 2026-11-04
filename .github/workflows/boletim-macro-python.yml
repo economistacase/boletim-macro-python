@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  issues: write   # necessário para o passo de notificação abrir a issue de falha
 
 jobs:
   verificar-dia-util:
@@ -131,8 +132,22 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           DATA=$(date -u +%F)
-          gh issue create \
-            --title "Falha no Boletim Macro $DATA" \
-            --body "O workflow **${{ github.workflow }}** falhou na execução de $DATA. [Ver logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" \
-            --label "bug" 2>/dev/null || \
-          echo "Issue não criada (label 'bug' pode não existir). Verifique a aba Actions."
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          # Corpo via heredoc: todas as linhas ficam na indentacao do bloco YAML,
+          # que o parser remove, entregando o markdown sem espacos a esquerda.
+          cat > "$RUNNER_TEMP/corpo_issue.md" <<EOF
+          O workflow **${{ github.workflow }}** falhou na execucao de $DATA.
+
+          [Ver logs do run]($RUN_URL)
+          EOF
+
+          # Sem '2>/dev/null' e sem '|| true': se a notificacao falhar, o motivo real
+          # (403 por falta de escopo, label inexistente etc.) precisa aparecer no log,
+          # em vez de uma mensagem generica que esconde a causa.
+          if gh issue create --title "Falha no Boletim Macro $DATA" --body-file "$RUNNER_TEMP/corpo_issue.md" --label "bug"; then
+            echo "Issue de falha criada."
+          else
+            echo "::warning::Nao foi possivel criar a issue com o label 'bug' (motivo acima). Tentando sem label."
+            gh issue create --title "Falha no Boletim Macro $DATA" --body-file "$RUNNER_TEMP/corpo_issue.md"
+          fi

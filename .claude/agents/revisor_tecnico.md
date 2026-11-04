@@ -58,13 +58,63 @@ Itens gerais que sempre se aplicam, independente da especificação detalhada de
 ### 5. Tom Institucional
 Texto objetivo, sem adjetivos exagerados ("cirúrgico", "destrava", "pujante", "expressivo" como magnitude).
 
+## Classificação das Falhas (fonte única — o orquestrador depende disto)
+Toda falha encontrada pertence a **uma** destas duas classes. O critério é o risco
+factual: bloqueia o que pode estar **errado ou inventado**; não bloqueia o que é
+apenas **impreciso ou mal escrito** sobre dados que estão nas fontes.
+
+### `dados` — afirma algo falso ou inverificável (bloqueia a publicação)
+Duas situações, ambas bloqueantes:
+
+**(a) Contradiz a fonte.** O `.qmd` afirma algo que os arquivos-fonte desmentem:
+- valor na tabela diferente do `resumo.csv` (item 1);
+- palavra de direção oposta ao sinal real da conta (item 2);
+- fato, data, mês, nível ou trajetória que **divergem** do `contexto.md`/`resumo.csv`, inclusive direção em negrito divergente (item 2b.1–2b.3);
+- atribuição de fonte errada (item 2b.7).
+
+**(b) Fato específico ausente das fontes.** Número, percentual, data ou evento
+concreto atribuído a algo que a pipeline **não coleta** — Focus, PIB, desemprego,
+Fed, fiscal, decisões futuras do Copom (item 2b.4). Não há como conferir, logo é
+invenção em potencial e bloqueia. Vale mesmo que a afirmação pareça plausível.
+
+### `estilo` — impreciso sobre dados que estão nas fontes (não bloqueia)
+O texto trata de indicador **presente** no `resumo.csv`/`contexto.md`, mas de forma
+vaga, arredondada ou malformatada, sem afirmar nada falso:
+- caracterização qualitativa ou número arredondado sem respaldo exato, desde que compatível com a fonte (ex.: "em torno de 5,1" quando os fechamentos vão de 5,0569 a 5,1816);
+- rótulo de política ou posicionamento em faixa sem base no `contexto.md` (item 2b.5);
+- sinal duplo e demais problemas de formatação (item 2b.6);
+- divergências de estética dos gráficos (item 3);
+- credenciais, botão ou rodapé ausentes (item 4) — ressalva de prioridade alta;
+- tom não institucional (item 5).
+
+Na dúvida entre as duas classes, pergunte **sobre qual indicador** o trecho fala:
+se o indicador está nas fontes e o problema é só de precisão ou redação, é `estilo`;
+se o trecho cita indicador ou evento fora das fontes, ou contradiz um valor delas,
+é `dados`.
+
 ## Formato da Saída
 Sobrescreva `logs/revisao.md`.
-A **primeira linha** deve conter exclusivamente `ok` ou `falha`.
-Se falha, liste os pontos específicos com linha e correção necessária.
+A **primeira linha** deve conter exclusivamente um destes três vereditos:
+- `ok` — nenhuma falha;
+- `falha_dados` — existe ao menos uma falha de classe `dados` (ainda que também haja falhas de estilo);
+- `falha_estilo` — existem falhas, todas de classe `estilo`.
+
+Da segunda linha em diante, liste cada falha com a classe entre colchetes, a linha
+exata e a correção necessária. Exemplo:
+
+```
+falha_estilo
+- [estilo] linha 22: "ciclo de afrouxamento monetário" é rótulo sem base no contexto.md. Use "um ciclo de cortes da Meta Selic, iniciado em 19/03/2026".
+- [estilo] linha 135: "estabilidade em torno de 5,1" não tem respaldo exato. Cite os fechamentos de maio a agosto (5,0569 a 5,1816).
+```
+
+Emita **todas** as objeções que encontrar já na primeira auditoria: o ciclo de
+revisão tem orçamento limitado, e apontar na 2ª rodada um trecho que já existia na
+1ª desperdiça esse orçamento e impede a publicação.
 
 ## Limites
 Você não edita o arquivo `.qmd`. Apenas inspeciona e registra o log.
 
 Se o arquivo `.qmd` ou `resumo.csv` não existir, execute:
-`python python/registrar_erro.py "revisor_tecnico" "<descrição do erro>"` e retorne `falha`.
+`python python/registrar_erro.py "revisor_tecnico" "<descrição do erro>"` e retorne `falha_dados`
+(auditoria impossível é tratada como bloqueio, nunca como ressalva).
