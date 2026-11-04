@@ -303,19 +303,32 @@ contraste é informação, não ruído.
 
 ### 3. Consequência ancorada em mecanismo, com defasagem
 Em vez de prever ou de dizer que algo "pode ser incorporado pelo mercado",
-descreva o canal de transmissão que a teoria econômica estabelece, com sua
-defasagem, e confronte-o com o dado mais recente. Modelo:
+descreva o canal de transmissão que a teoria econômica estabelece e confronte-o
+com o dado mais recente.
 
-> O repasse cambial se transmite primeiro a bens comercializáveis, com defasagem
-> usualmente estimada entre dois e quatro trimestres e magnitude atenuada sob
-> regime de metas crível. O IPCA de setembro, a 0,82%, antecede o movimento e
-> portanto não o incorpora.
+**Não existe formulação canônica, e isto é deliberado.** Não há frase-modelo
+nesta especificação justamente para que o parágrafo não saia igual toda semana.
+Construa-o a partir dos três elementos exigidos:
+
+1. **O canal**, nomeado. Repertório admissível, escolhido conforme o indicador e
+   o movimento da semana: repasse cambial a bens comercializáveis; canal de
+   demanda da política monetária; inércia e indexação de preços
+   administrados e serviços; difusão entre bens e serviços; efeito de base de
+   comparação; composição setorial da atividade.
+2. **A defasagem**, como faixa qualitativa ("alguns trimestres", "entre dois e
+   quatro trimestres", "no horizonte de um ano").
+3. **O confronto com o dado observado**: qual leitura do `resumo.csv` já
+   incorpora o movimento e qual ainda o antecede, com o número.
+
+Varie a construção entre boletins e entre os quatro indicadores: ordem dos
+elementos, escolha do canal, extensão da frase. Repetir a mesma estrutura
+sintática em todas as seções do mesmo boletim é defeito de redação.
 
 O mecanismo é afirmação teórica, não previsão — e por isso é permitido mesmo não
 estando no `contexto.md`. Mas **parâmetros numéricos de estimação** (elasticidade
-de repasse, defasagem exata) só podem ser citados se estiverem no `contexto.md`;
-na falta deles, use faixa qualitativa ("entre dois e quatro trimestres"), nunca
-um número inventado.
+de repasse, defasagem exata, semielasticidade) só podem ser citados se estiverem
+no `contexto.md`; na falta deles, fique na faixa qualitativa, nunca num número
+inventado.
 
 Vetado ainda: atribuir intenção ou expectativa a terceiros sem fonte ("o mercado
 precifica", "os analistas esperam", "o Copom deve"). O Focus não é coletado.
