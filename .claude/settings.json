@@ -6,7 +6,18 @@
       "Read(**)",
       "Write(**)",
       "Edit(**)",
-      "WebFetch"
+      "WebFetch",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(mkdir:*)",
+      "Bash(test:*)",
+      "Bash(stat:*)",
+      "Bash(du:*)",
+      "Bash(grep:*)"
     ],
     "ask": [
       "Bash(git:*)",
