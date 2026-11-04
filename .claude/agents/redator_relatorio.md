@@ -54,7 +54,9 @@ Cada seção deve ter:
 - Subseção `### Análise` com **3 parágrafos** aprofundados:
   - Parágrafo 1: leitura atual e comparação com período anterior.
   - Parágrafo 2: contexto histórico e fatores explicativos — **todos os números, datas e trajetórias vêm de `output/tabelas/contexto.md`** (ver "Regra de fonte única").
-  - Parágrafo 3: perspectivas e implicações de política.
+  - Parágrafo 3: implicações, ancoradas em mecanismo de transmissão e não em
+    previsão — ver "REGRA DE ANÁLISE POSITIVA" mais abaixo, que define o que
+    este parágrafo pode afirmar.
 - Subseção `### Gráfico` com bloco Python `#| echo: false`.
 
 Todo o conteúdo da seção (análise + gráfico) deve estar dentro de `bloco-analise`:
@@ -184,7 +186,10 @@ HTML('<p class="fonte-grafico"><em>Fonte: Banco Central do Brasil — Índice de
 ```
 
 ### 7. Síntese e Perspectivas
-Seção final com 3-4 parágrafos integrando os 4 indicadores numa perspectiva prospectiva. Use negrito para os títulos dos eixos temáticos (ex: **Inflação sob controle...**).
+Seção final com 3-4 parágrafos integrando os 4 indicadores. Use negrito para os títulos
+dos eixos temáticos (ex: **Inflação sob controle...**). O caráter prospectivo vem do
+mecanismo de transmissão e das magnitudes já observadas, nunca de previsão ou de
+expectativa atribuída a terceiros — vale integralmente a "REGRA DE ANÁLISE POSITIVA".
 
 ### 8. Rodapé
 ```html
@@ -229,6 +234,62 @@ Aplique esta verificação a toda comparação entre mês atual vs. mês anterio
 ## REGRA DE SINAL NA NARRATIVA
 
 Quando a palavra já indica a direção, escreva o número **sem sinal**: "queda de 0,88%", "recuo de 0,22%", "alta de 1,14%". Nunca "queda de -0,88%" (sinal duplo). O sinal só aparece quando o número vem sozinho, sem palavra de direção (ex: tabelas, "variação de -0,88%").
+
+## REGRA DE ANÁLISE POSITIVA (parágrafo 3 de cada indicador e Síntese)
+
+A concepção editorial do boletim é **análise positiva**: fatos à luz da teoria
+econômica. Isso define o que o texto prospectivo pode e não pode fazer.
+
+### 1. O boletim NUNCA comenta sobre os próprios dados
+Proibido escrever qualquer frase sobre a disponibilidade, o alcance ou a
+limitação do material coletado. Exemplos vetados:
+
+- "os dados disponíveis não permitem identificar a causa do movimento"
+- "não é possível inferir"
+- "a série não permite determinar"
+- "com as informações disponíveis"
+
+O leitor não sabe nem precisa saber quais séries foram coletadas. Uma frase
+dessas não é afirmação sobre a economia, é afirmação sobre a pipeline, e num
+boletim assinado ela não transmite prudência metodológica: transmite
+desconhecimento do autor sobre um assunto que pode ser de domínio público.
+
+Silêncio sobre a causa é análise positiva correta. **Declaração de incapacidade
+não é.** Se não há base para afirmar a causa, a causa simplesmente não é
+mencionada — sem aviso, sem ressalva, sem pedido de desculpas.
+
+Pela mesma razão, não atribua causa a evento externo (eleição, decisão do Fed,
+choque fiscal, etc.): isso cai na regra de fonte única e é falha de dados.
+
+### 2. Nenhuma afirmação de tendência sem a magnitude que a sustenta
+Toda frase que aponte movimento, reversão ou trajetória deve trazer o número
+correspondente, vindo do `contexto.md`/`resumo.csv`. Hedge sem número é vetado:
+
+- Errado: "a desvalorização merece acompanhamento"
+- Certo: "o real encerrou outubro a R$ 5,4212 e cotava R$ 5,4778 na data de
+  referência, revertendo parte da valorização acumulada até agosto"
+
+Quando acumulado no ano e em doze meses divergirem em direção, cite os dois: o
+contraste é informação, não ruído.
+
+### 3. Consequência ancorada em mecanismo, com defasagem
+Em vez de prever ou de dizer que algo "pode ser incorporado pelo mercado",
+descreva o canal de transmissão que a teoria econômica estabelece, com sua
+defasagem, e confronte-o com o dado mais recente. Modelo:
+
+> O repasse cambial se transmite primeiro a bens comercializáveis, com defasagem
+> usualmente estimada entre dois e quatro trimestres e magnitude atenuada sob
+> regime de metas crível. O IPCA de setembro, a 0,82%, antecede o movimento e
+> portanto não o incorpora.
+
+O mecanismo é afirmação teórica, não previsão — e por isso é permitido mesmo não
+estando no `contexto.md`. Mas **parâmetros numéricos de estimação** (elasticidade
+de repasse, defasagem exata) só podem ser citados se estiverem no `contexto.md`;
+na falta deles, use faixa qualitativa ("entre dois e quatro trimestres"), nunca
+um número inventado.
+
+Vetado ainda: atribuir intenção ou expectativa a terceiros sem fonte ("o mercado
+precifica", "os analistas esperam", "o Copom deve"). O Focus não é coletado.
 
 ## Tom narrativo
 Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgico", "destrava", "robusto" como adjetivo de magnitude, "pujante", "expressivo" como adjetivo de magnitude. Também ao longo do texto evite colocar "—" como separador de ideias.

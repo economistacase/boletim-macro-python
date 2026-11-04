@@ -43,6 +43,41 @@ Leia `output/tabelas/contexto.md`. Para **cada** número, percentual, data, mês
 
 Não use sua memória para julgar fatos históricos: a referência é exclusivamente o `contexto.md`/`resumo.csv`.
 
+### 2c. Análise Positiva (não mantenha critério próprio — leia a especificação)
+Leia a seção "REGRA DE ANÁLISE POSITIVA" de `.claude/agents/redator_relatorio.md`:
+ela é a **fonte única** do que o texto prospectivo pode afirmar. Audite o `.qmd`
+contra o que estiver escrito ali no momento da auditoria. Verifique em cada
+parágrafo 3 e na Síntese:
+
+1. **Meta-comentário sobre os dados** — qualquer frase sobre disponibilidade,
+   alcance ou limitação do material coletado ("os dados disponíveis não
+   permitem...", "não é possível inferir", "com as informações disponíveis").
+   É falha de classe `estilo`: a frase não é falsa, é imprópria. Reporte a linha
+   e proponha a remoção, não a reescrita — o espaço deve ser ocupado por fato
+   com magnitude ou pelo mecanismo teórico.
+2. **Afirmação de tendência sem magnitude** — movimento, reversão ou trajetória
+   sem o número que a sustenta ("merece acompanhamento", "segue pressionado").
+   Falha de classe `estilo`; proponha o valor correspondente do
+   `contexto.md`/`resumo.csv`.
+3. **Expectativa atribuída a terceiros** ("o mercado precifica", "os analistas
+   esperam", "o Copom deve") e **causa atribuída a evento externo** (eleição,
+   Fed, choque fiscal). O Focus e esses eventos não são coletados. A classe
+   depende de a frase ser concreta ou vaga, pela mesma régua do resto da
+   taxonomia:
+   - com número, data ou direção específica ("os analistas esperam a Selic a
+     12,00%", "a queda reflete o resultado eleitoral") → `dados`, pois é fato
+     inverificável pelo item 2b.4;
+   - hedge vago, sem número ("pode ser incorporada pelo mercado", "tende a ser
+     monitorado pelos analistas") → `estilo`. Não afirma nada falso, apenas não
+     informa. Proponha a remoção.
+4. **Parâmetro numérico de estimação** (elasticidade de repasse, defasagem
+   exata) ausente do `contexto.md`: falha de classe `dados`. Faixa qualitativa
+   ("entre dois e quatro trimestres") é permitida e não é falha.
+
+Enunciado de mecanismo teórico sem número — "o repasse cambial atinge primeiro
+bens comercializáveis" — é permitido e **não** é falha, mesmo não constando do
+`contexto.md`. É teoria econômica, não fato conjuntural.
+
 ### 3. Estética Corporativa dos Gráficos
 **NÃO use uma lista própria memorizada para isso — ela pode ficar desatualizada em relação à especificação real.** Leia a seção "6. Gráficos Interativos — Especificações por Indicador" de `.claude/agents/redator_relatorio.md`: ela é a **fonte única de verdade** sobre o que cada gráfico deve ou não conter (tipo de traço, `add_hline`, séries, etc). Compare o `.qmd` gerado contra o que está escrito *naquele arquivo no momento da auditoria*, não contra uma lista fixa abaixo.
 
@@ -85,6 +120,7 @@ vaga, arredondada ou malformatada, sem afirmar nada falso:
 - sinal duplo e demais problemas de formatação (item 2b.6);
 - divergências de estética dos gráficos (item 3);
 - credenciais, botão ou rodapé ausentes (item 4) — ressalva de prioridade alta;
+- meta-comentario sobre os dados e tendencia sem magnitude (item 2c.1 e 2c.2);
 - tom não institucional (item 5).
 
 Na dúvida entre as duas classes, pergunte **sobre qual indicador** o trecho fala:
