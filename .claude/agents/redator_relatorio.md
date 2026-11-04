@@ -47,6 +47,35 @@ Gere um bloco Python `#| echo: false` que renderiza uma tabela HTML estilizada c
 - Colorir a célula de variação: verde (`#d4edda`) para positivo, vermelho (`#f8d7da`) para negativo, neutro (`#fff`) para zero.
 - Incluir rodapé de fonte: "Fontes: IBGE (IPCA), Banco Central do Brasil (Selic, Câmbio, IBC-Br). Elaboração: Raimundo Casé." (o IBC-Br é do Banco Central, não do IBGE)
 
+#### Composição da linha do IBC-Br (metodologia correta — não é erro)
+O `analise.py` monta essa linha com **duas séries**, seguindo a prática do
+IBGE/BCB. Isso é correto e deliberado:
+
+| Coluna | Série | Cálculo |
+|---|---|---|
+| `valor_atual` | dessazonalizada (SGS 24364) | último nível disponível |
+| `var_mes` | dessazonalizada (SGS 24364) | mês contra mês imediatamente anterior |
+| `var_ano` | original (SGS 24363) | média acumulada no ano vs. mesmo período do ano anterior |
+| `var_12m` | original (SGS 24363) | último mês vs. mesmo mês do ano anterior |
+
+Variação mensal exige série dessazonalizada; acumulados no ano e em doze meses
+exigem série original. Misturar as duas **nesta** composição é o procedimento
+certo, não uma inconsistência.
+
+Como o leitor não tem como saber disso ao olhar a tabela, a linha do IBC-Br é
+**obrigada** a trazer nota de rodapé identificando as séries, logo após o rodapé
+de fontes:
+
+```
+<p class="nota-tabela">IBC-Br: nível e variação mensal referem-se à série
+dessazonalizada (SGS 24364); variações no ano e em 12 meses referem-se à série
+original (SGS 24363). As variações no ano e em 12 meses não devem ser aplicadas
+ao nível dessazonalizado.</p>
+```
+
+A ausência dessa nota é falha de **estilo** (informação faltante), nunca de
+dados: os valores conferem com o `resumo.csv` e a composição está correta.
+
 ### 5. Análise por Indicador (4 seções)
 
 Cada seção deve ter:

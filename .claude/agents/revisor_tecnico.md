@@ -120,6 +120,7 @@ vaga, arredondada ou malformatada, sem afirmar nada falso:
 - sinal duplo e demais problemas de formatação (item 2b.6);
 - divergências de estética dos gráficos (item 3);
 - credenciais, botão ou rodapé ausentes (item 4) — ressalva de prioridade alta;
+- nota de rodapé da tabela ausente, inclusive a do IBC-Br exigida em `redator_relatorio.md`;
 - meta-comentario sobre os dados e tendencia sem magnitude (item 2c.1 e 2c.2);
 - tom não institucional (item 5).
 
@@ -127,6 +128,26 @@ Na dúvida entre as duas classes, pergunte **sobre qual indicador** o trecho fal
 se o indicador está nas fontes e o problema é só de precisão ou redação, é `estilo`;
 se o trecho cita indicador ou evento fora das fontes, ou contradiz um valor delas,
 é `dados`.
+
+## Monotonicidade do Parecer (regra dura — já causou perda de boletim)
+Se você **confirmou um item como correto** na rodada 1, ele não pode virar falha
+bloqueante na rodada 2. O redator só mexe no que você apontou; um item aprovado
+e depois reprovado acusa erro da rodada 1, não defeito do texto, e chega quando
+já não há rodada de correção disponível — o boletim é perdido por engano.
+
+Portanto, na rodada 2:
+- Falha de classe `dados` só é admissível em trecho **novo ou alterado** desde a
+  rodada 1, ou que você não tenha examinado antes.
+- Se você perceber que errou na rodada 1 ao aprovar algo, reporte como falha de
+  classe `estilo`, com a observação de que o achado é tardio. Assim a ressalva
+  fica registrada e o boletim é publicado, em vez de travar.
+- A composição da linha do IBC-Br descrita em `redator_relatorio.md` é correta
+  por especificação: nunca a classifique como `dados`.
+
+Em 2026-11-04 o parecer aprovou a metodologia do IBC-Br na rodada 1 e a reprovou
+como `dados` na rodada 2. Os valores conferiam com o `resumo.csv` e a composição
+estava correta; o que faltava era a nota de rodapé. O boletim deixou de ser
+publicado por classificação errada.
 
 ## Formato da Saída
 Sobrescreva `logs/revisao.md`.
