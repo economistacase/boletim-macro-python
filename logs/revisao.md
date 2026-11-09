@@ -1,16 +1,6 @@
-ok
-Rodada 2 de 2 (boletim_2026-11-04.qmd). Nenhuma falha encontrada.
+falha_estilo
+- [estilo] linha 184 (Selic, parágrafo 3): a frase "Com a taxa em 13,75% e a inflação de 12 meses acima do teto de 4,50%, a Meta Selic em 13,75% convive com uma inflação de 12 meses acima do teto de 4,50% e que subiu 0,36 p.p. em setembro" repete a mesma informação duas vezes. Não há erro factual (4,58% > 4,50%; alta de 0,36 p.p. confere com o contexto.md), mas é defeito de redação. Correção: "A Meta Selic em 13,75% convive com um acumulado de 12 meses de 4,58%, acima do teto de 4,50%, que subiu 0,36 p.p. em setembro".
+- [estilo] linha 276 (Leitura integrada): "o que já o incorpora parcialmente é a cotação de 09/11/2026" atribui à cotação a função de incorporar o choque, quando ela é o próprio choque. Imprecisão de redação, sem dado falso. Correção: "e a cotação de R$ 5,5146 em 09/11/2026 já reflete a desvalorização de 1,72% desde o fim de outubro".
+- [estilo] linha 276 (Leitura integrada, Síntese): "Inflação de 12 meses acima do teto, câmbio mais depreciado e juros em queda gradual" traz tendências sem o número na própria frase (item 2c.2). Os números existem no contexto.md, então é estilo. Correção: "Inflação de 12 meses de 4,58%, acima do teto de 4,50%, câmbio com desvalorização de 3,39% em 12 meses e juros em queda de 1,25 p.p. desde o início do ano".
 
-Verificado nesta rodada:
-- Tabela-resumo: valor_atual e variações conferem com resumo.csv (IPCA 0.82/3.95/4.58; Câmbio 5.48/1.04/-0.45/2.70; Selic 13.75/0.00/-1.25/-1.25; IBC-Br 110.41/0.34/1.55/1.21).
-- Coerência direcional: todas as comparações do Panorama, seções 1 a 4 e Síntese conferem com o sinal (aceleração, alta, acima do teto, maior, abaixo do máximo, queda, se valorizou, se desvalorizou, subiu, quedas).
-- Correções de rodada 1 aplicadas: sinal duplo removido em "se valorizou 0,45%" e em "queda de 1,25 p.p."; "fase inicial de transmissão" removida; comparação com o ciclo 2023-2024 reescrita com datas e 0,50 p.p. conforme contexto.md; "ponto de partida do segundo semestre" removido.
-- Fatos de contexto.md (níveis, datas, recordes, trajetória da Selic e do IPCA de 12 meses, séries do IBC-Br) conferem.
-- Fontes atribuídas corretamente (IBGE para IPCA; BCB para Selic, Câmbio e IBC-Br) na tabela, nos gráficos e no rodapé.
-- Nota de rodapé do IBC-Br presente. Credenciais, botão de impressão e rodapé presentes.
-- Gráficos conforme redator_relatorio.md: linha de referência só na Selic; sem add_annotation; plot_bgcolor e fig.show() em todos.
-- Sem expectativas de terceiros, causas externas, meta-comentário sobre os dados, rótulos de política ou parâmetros numéricos de estimação fora do contexto.
-
-Observações não bloqueantes (não são falhas, não alteram o veredito):
-- Síntese, "o efeito dos cortes sobre preços ainda está em curso", e seção 4, "o IBC-Br ... ainda não reflete plenamente cortes" (seção 3): são inferências de timing a partir da defasagem teórica e das datas de 19/03/2026 em diante. Não são posicionamento literal no ciclo como a "fase inicial" removida na rodada 1.
-- Título da Síntese "Atividade em recuperação parcial": rótulo qualitativo, sustentado na mesma passagem por 0,34%, 0,76% abaixo do máximo e quedas anteriores.
+Conferidos sem falha nesta rodada: valores da tabela (lidos do resumo.csv, com 2 casas decimais); palavras de direção e sinais de todas as comparações do IPCA, câmbio, Selic e IBC-Br contra o contexto.md; negritos de direção (aceleração, alta, maior, acima do teto, desvalorização, corte, queda, crescimento); níveis, datas e trajetórias (tabelas do IPCA 12 meses, Selic 2021-2026, câmbio mensal, IBC-Br 2026); todas as correções da rodada 1 aplicadas (afrouxamento removido, "primeiro semestre" removido, "a de outubro" com níveis, hedges removidos, níveis do IBC-Br completos, "calculado com o dólar" corrigido); ausência de expectativa de terceiros, eventos externos e parâmetros numéricos de estimação (faixas "dois a quatro trimestres" e "alguns trimestres" são permitidas); ausência de meta-comentário sobre os dados; nota de rodapé do IBC-Br; fontes (IBGE para IPCA, BCB para Selic, Câmbio e IBC-Br); estrutura de três parágrafos por indicador e quatro na Síntese; gráficos (paleta, layout, plot_bgcolor, fig.show, linha de referência apenas na Selic); tom institucional; credenciais, botão e rodapé.
