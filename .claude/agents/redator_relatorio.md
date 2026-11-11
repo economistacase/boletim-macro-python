@@ -271,6 +271,39 @@ local a um movimento que é mundial, que é o erro mais provável.
 Se o arquivo não existir na rodada, simplesmente não trate do tema — sem
 mencionar a ausência, pela regra de análise positiva.
 
+## SELIC: NÍVEL E DURAÇÃO, NUNCA TRAJETÓRIA (erro factual grave já publicado)
+
+A série 432 registra a Meta Selic vigente em cada dia. Uma decisão do Copom de
+**manter** a taxa **não produz evento nenhum** na série: o valor simplesmente
+continua. A série é indistinguível do caso em que o Copom nem se reuniu.
+
+Consequência direta: **a pipeline não tem como saber o que a última reunião
+decidiu.** O histórico de cortes passados não autoriza afirmar que o ciclo
+continua.
+
+**Proibido**, porque não é inferível e já saiu errado no boletim publicado em
+11/11/2026:
+- "juros em trajetória de corte"
+- "ciclo de afrouxamento monetário" / "ciclo de cortes em curso"
+- "o Copom segue cortando", "a Selic segue em queda"
+- qualquer afirmação sobre o que o Copom decidiu, decidirá ou tende a decidir
+
+Naquele caso, os cinco cortes terminaram em 17/09/2026 e a reunião de 03-04/11
+manteve a taxa. A frase "juros em trajetória de corte" era falsa, embora cada
+número do contexto estivesse correto.
+
+**Obrigatório.** Sempre que citar o nível da Selic, cite **desde quando** ele
+vigora, usando a data do último corte que está no `contexto.md`:
+
+- "a Meta Selic está em 13,75% desde 17/09/2026"
+- "em 13,75% desde 17/09/2026, após cinco cortes de 0,25 p.p. iniciados em
+  19/03/2026"
+
+Essa forma é factual, é verificável na série e informa o leitor de que a taxa
+está estável há semanas — sem que a pipeline precise conhecer o calendário de
+reuniões. Descrever os cortes passados como **fatos datados** é permitido e
+desejável; descrever a direção **atual ou futura** da política não é.
+
 ## REGRA CRÍTICA DE COERÊNCIA DIRECIONAL (erro factual grave já ocorrido)
 
 Toda vez que você comparar dois valores numéricos na narrativa usando uma palavra de direção — "acima", "abaixo", "superior", "inferior", "alta", "queda", "aumento", "redução", "aceleração", "desaceleração", "maior", "menor" — você DEVE primeiro fazer a subtração explícita entre os dois números e só então escrever a palavra que corresponde ao sinal do resultado. NUNCA escreva a frase de cabeça e "encaixe" os números depois.

@@ -93,6 +93,30 @@ permitem, e por isso bloqueia a publicação.
 Números da decomposição divergentes do `contexto_cambio.md` também são `dados`.
 Já omitir a decomposição não é falha alguma.
 
+### 2e. Trajetória da Política Monetária (bloqueia)
+Leia a seção "SELIC: NÍVEL E DURAÇÃO, NUNCA TRAJETÓRIA" de
+`.claude/agents/redator_relatorio.md`. A série 432 não registra decisões de
+manter a taxa, logo a pipeline **não sabe** o que a última reunião do Copom
+decidiu.
+
+Distinga com cuidado, porque as duas coisas parecem iguais e não são:
+
+- **Afirmação de direção em curso ou futura** — "juros em trajetória de corte",
+  "ciclo de afrouxamento em curso", "o Copom segue cortando", "a Selic segue em
+  queda", "deve continuar". É falha de classe `dados` e **bloqueia**: é
+  falsificável, não é inferível da série, e já saiu errada no boletim de
+  11/11/2026 (os cortes terminaram em 17/09 e a reunião de 03-04/11 manteve a
+  taxa em 13,75%).
+- **Rótulo estático de postura** — "política restritiva", "expansionista",
+  "neutra". Permanece falha de classe `estilo` pelo item 2b.5: é vago, não
+  falseável pela série, e não bloqueia.
+- **Corte passado, datado** — "cinco cortes de 0,25 p.p. entre 19/03 e
+  17/09/2026". Não é falha: é fato que está no `contexto.md`.
+
+Verifique também o **obrigatório**: toda citação do nível da Selic deve vir com
+desde quando ele vigora ("13,75% desde 17/09/2026"). A ausência dessa data é
+falha de classe `estilo`, porque omite informação disponível que muda a leitura.
+
 ### 3. Estética Corporativa dos Gráficos
 **NÃO use uma lista própria memorizada para isso — ela pode ficar desatualizada em relação à especificação real.** Leia a seção "6. Gráficos Interativos — Especificações por Indicador" de `.claude/agents/redator_relatorio.md`: ela é a **fonte única de verdade** sobre o que cada gráfico deve ou não conter (tipo de traço, `add_hline`, séries, etc). Compare o `.qmd` gerado contra o que está escrito *naquele arquivo no momento da auditoria*, não contra uma lista fixa abaixo.
 
@@ -136,6 +160,7 @@ vaga, arredondada ou malformatada, sem afirmar nada falso:
 - divergências de estética dos gráficos (item 3);
 - credenciais, botão ou rodapé ausentes (item 4) — ressalva de prioridade alta;
 - nota de rodapé da tabela ausente, inclusive a do IBC-Br exigida em `redator_relatorio.md`;
+- nível da Selic citado sem a data desde a qual vigora (item 2e);
 - meta-comentario sobre os dados e tendencia sem magnitude (item 2c.1 e 2c.2);
 - tom não institucional (item 5).
 
@@ -176,7 +201,7 @@ exata e a correção necessária. Exemplo:
 
 ```
 falha_estilo
-- [estilo] linha 22: "ciclo de afrouxamento monetário" é rótulo sem base no contexto.md. Use "um ciclo de cortes da Meta Selic, iniciado em 19/03/2026".
+- [estilo] linha 22: "política monetária restritiva" é rótulo estático sem base no contexto.md (item 2b.5). Descreva o fato: "a Meta Selic está em 13,75% desde 17/09/2026".
 - [estilo] linha 135: "estabilidade em torno de 5,1" não tem respaldo exato. Cite os fechamentos de maio a agosto (5,0569 a 5,1816).
 ```
 
