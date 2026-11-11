@@ -238,12 +238,38 @@ Na tabela HTML, use os valores **exatos do `resumo.csv`** (leia o CSV com Python
 
 Você não tem como fazer contas nem consultar dados externos, e sua memória sobre o histórico econômico pode estar errada ou desatualizada. Por isso:
 
-1. **Todo número, percentual, nível, data, mês, recorde ou trajetória** citado no texto deve estar escrito literalmente em `output/tabelas/contexto.md` ou `output/tabelas/resumo.csv`. Se não estiver lá, **não escreva**.
+1. **Todo número, percentual, nível, data, mês, recorde ou trajetória** citado no texto deve estar escrito literalmente em `output/tabelas/contexto.md`, `output/tabelas/resumo.csv` ou `output/tabelas/contexto_cambio.md`. Se não estiver lá, **não escreva**.
 2. **Proibido usar a memória** para fatos históricos: decisões passadas do Copom, níveis anteriores da Selic, IPCA de meses anteriores, máximas/mínimas, "desde quando" algo ocorre. Erros reais já cometidos: "Selic em 15,00% ao longo de 2025" (só chegou a 15,00% em 19/06/2025) e "IPCA manteve o acumulado em 12 meses" (subiu de 4,22% para 4,58%).
 3. **Proibido calcular de cabeça** (diferenças, acumulados, médias). Use a comparação já pronta no `contexto.md`, inclusive a palavra de direção em negrito que ele indica (alta/queda, aceleração/desaceleração, se valorizou/se desvalorizou etc.).
 4. **Proibido citar eventos, projeções ou números externos** (Focus, PIB, desemprego, Fed, guerras, fiscal) que não estejam nos arquivos. Explicações econômicas qualitativas são permitidas, desde que não afirmem fatos verificáveis ausentes dos arquivos (prefira "pode refletir", "sugere").
 5. **Interpretações também precisam de base nos dados.** Não posicione valores em faixas ou intervalos ("parte inferior da faixa", "patamar elevado") nem rotule a política monetária ("restritiva", "expansionista", "neutra") a menos que o `contexto.md` traga esse dado (ex: máximo/mínimo de 5 anos, trajetória da Selic). Prefira descrever o fato: "a Selic está em 13,75% após cinco cortes consecutivos de 0,25 p.p.".
 6. Respeite as notas de metodologia do `contexto.md` (ex: no IBC-Br, variações no ano e em 12 meses são da série original, não do nível dessazonalizado).
+
+## DECOMPOSIÇÃO DO CÂMBIO (`contexto_cambio.md`)
+
+O arquivo `output/tabelas/contexto_cambio.md` traz a variação do real separada
+entre o movimento do dólar no mundo e o resíduo, em três janelas (no mês, no ano,
+em 12 meses). Use-o no parágrafo 3 da seção de Câmbio e, quando couber, na
+Síntese: é o que permite dizer se o movimento do real foi global ou não, sem
+atribuir causa a nenhum evento.
+
+**Restrição de linguagem, inviolável.** O resíduo é "o que não é explicado pelo
+dólar global". Escrever que ele é **doméstico**, **interno**, **local**, "próprio
+do Brasil" ou equivalente é afirmação que os dados não sustentam: a cesta é de
+moedas de mercados desenvolvidos, e uma aversão a risco que atinja emergentes em
+bloco cairia no resíduo sem nada ter de brasileira. Formulações corretas:
+
+- "o real desvalorizou 3,00% no mês, enquanto o dólar global se fortaleceu 0,37%,
+  de modo que 2,63 p.p. do movimento não são explicados pelo dólar"
+- "no ano o dólar global se fortaleceu 4,17% e o real cedeu 1,48%, ou seja, o real
+  perdeu menos do que o movimento global do dólar explicaria"
+
+Quando o resíduo for pequeno (o arquivo dirá que o movimento foi praticamente
+todo explicado pelo dólar global), **diga isso**: evita atribuir significado
+local a um movimento que é mundial, que é o erro mais provável.
+
+Se o arquivo não existir na rodada, simplesmente não trate do tema — sem
+mencionar a ausência, pela regra de análise positiva.
 
 ## REGRA CRÍTICA DE COERÊNCIA DIRECIONAL (erro factual grave já ocorrido)
 
@@ -337,6 +363,6 @@ precifica", "os analistas esperam", "o Copom deve"). O Focus não é coletado.
 Linguagem técnica e objetiva, 3 parágrafos por indicador. Proibido: "cirúrgico", "destrava", "robusto" como adjetivo de magnitude, "pujante", "expressivo" como adjetivo de magnitude. Também ao longo do texto evite colocar "—" como separador de ideias.
 
 ## Como proceder
-1. Leia `output/tabelas/contexto.md` (fatos históricos já calculados — fonte principal da narrativa), `output/tabelas/resumo.csv` e `output/tabelas/historico.csv` (este último apenas para os gráficos).
+1. Leia `output/tabelas/contexto.md` (fatos históricos já calculados — fonte principal da narrativa), `output/tabelas/resumo.csv`, `output/tabelas/contexto_cambio.md` (decomposição do câmbio, se existir) e `output/tabelas/historico.csv` (este último apenas para os gráficos).
 2. Escreva o arquivo `.qmd` completo com Write para o caminho exato `boletim_<DATA_REFERENCIA>.qmd` — **sem nenhum prefixo de diretório**, ou seja, o arquivo deve ficar na raiz do projeto, não em `output/` nem em qualquer subpasta. Exemplo correto: `boletim_2026-07-06.qmd`. Exemplo errado: `output/boletim_2026-07-06.qmd`.
 3. Confirme que o arquivo foi criado na raiz: `ls boletim_<DATA_REFERENCIA>.qmd`.
