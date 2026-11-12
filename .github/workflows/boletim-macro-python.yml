@@ -2,12 +2,21 @@ name: Boletim Macroeconômico Semanal
 
 on:
   schedule:
-    # seg a qui, 10:00 UTC = 07:00 BRT. O job "verificar-dia-util" libera a
+    # (1) Cadencia semanal: seg a qui, 10:00 UTC = 07:00 BRT. O portao libera a
     # geracao em qualquer dia util dessa janela enquanto a semana ainda nao
-    # tiver boletim publicado — e so nesse caso. Assim um feriado na segunda
-    # ou uma falha na terca sao cobertos pelo dia seguinte, sem gerar boletim
-    # em duplicidade quando a primeira tentativa deu certo.
+    # tiver boletim publicado — e so nesse caso. Assim um feriado na segunda ou
+    # uma falha na terca sao cobertos pelo dia seguinte, sem gerar boletim em
+    # duplicidade quando a primeira tentativa deu certo.
     - cron: "0 10 * * 1-4"
+    # (2) Divulgacao do IPCA: todo dia 8 a 15, 12:00 UTC = 09:00 BRT, mesma
+    # janela do repositorio relatorio-ipca. A data de divulgacao varia de mes
+    # para mes (em novembro/2026 o IBGE divulgou no dia 12), entao em vez de
+    # apostar num dia fixo o portao verifica se a serie 433 ganhou mes novo e
+    # so entao regenera. Sem isso, um boletim gerado na segunda ficaria com o
+    # mes anterior ate a segunda seguinte, enquanto o Painel IPCA do mesmo
+    # autor ja teria atualizado — dois produtos assinados dizendo coisas
+    # diferentes sobre a inflacao corrente.
+    - cron: "0 12 8-15 * *"
   workflow_dispatch:
     inputs:
       data_ref:
@@ -19,6 +28,12 @@ permissions:
   contents: write
   issues: write   # necessário para o passo de notificação abrir a issue de falha
 
+# Dois gatilhos podem coincidir (p. ex. IPCA divulgado numa segunda). Sem isto,
+# duas execucoes simultaneas disputariam o push.
+concurrency:
+  group: boletim-macro
+  cancel-in-progress: false
+
 jobs:
   verificar-dia-util:
     runs-on: ubuntu-latest
@@ -26,11 +41,14 @@ jobs:
       rodar: ${{ steps.check.outputs.rodar }}
     steps:
       # fetch-depth: 0 porque o passo abaixo precisa do historico para achar
-      # o commit do ultimo boletim publicado.
+      # o commit do ultimo boletim publicado. O referencia_ipca.txt fica na
+      # raiz e e consultado pelo gatilho do IPCA.
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          sparse-checkout: python
+          sparse-checkout: |
+            python
+            referencia_ipca.txt
 
       - name: Descobrir a data do último boletim publicado
         id: ultimo
@@ -44,21 +62,43 @@ jobs:
           echo "data=$ULTIMO" >> "$GITHUB_OUTPUT"
           echo "Ultimo boletim publicado: ${ULTIMO:-<desconhecido>}"
 
-      - name: Verificar se o boletim da semana ainda está pendente
+      # Consulta barata (so stdlib, sem Quarto nem Claude Code) para saber se o
+      # IPCA ganhou mes novo. Imprime key=value direto no GITHUB_OUTPUT; os
+      # diagnosticos do script vao para stderr.
+      - name: Verificar se o IPCA ganhou mês novo
+        id: ipca
+        run: python3 python/ipca_referencia.py referencia_ipca.txt >> "$GITHUB_OUTPUT"
+
+      - name: Decidir se gera o boletim
         id: check
         run: |
+          SEMANA=false
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            RODAR=true   # execução manual sempre roda
+            SEMANA=true   # execução manual sempre roda
           else
-            RODAR=$(TZ=America/Sao_Paulo python3 python/dia_util.py "$(TZ=America/Sao_Paulo date +%F)" --ultimo-boletim "${{ steps.ultimo.outputs.data }}")
+            SEMANA=$(TZ=America/Sao_Paulo python3 python/dia_util.py "$(TZ=America/Sao_Paulo date +%F)" --ultimo-boletim "${{ steps.ultimo.outputs.data }}")
           fi
           # Um valor inesperado faria o job de geracao ser pulado em silencio —
           # exatamente o tipo de falha invisivel que queremos evitar. Melhor falhar.
-          if [ "$RODAR" != "true" ] && [ "$RODAR" != "false" ]; then
-            echo "::error::dia_util.py devolveu '$RODAR' em vez de true/false. Abortando para nao pular a geracao silenciosamente."
+          if [ "$SEMANA" != "true" ] && [ "$SEMANA" != "false" ]; then
+            echo "::error::dia_util.py devolveu '$SEMANA' em vez de true/false. Abortando para nao pular a geracao silenciosamente."
             exit 1
           fi
+
+          IPCA="${{ steps.ipca.outputs.ipca_novo }}"
+
+          # Os dois gatilhos sao independentes: o do IPCA atravessa de proposito
+          # a regra "a semana ja tem boletim", que e justamente o que deixava o
+          # boletim defasado no dia da divulgacao.
+          if [ "$SEMANA" = "true" ] || [ "$IPCA" = "true" ]; then
+            RODAR=true
+          else
+            RODAR=false
+          fi
+
           echo "rodar=$RODAR" >> "$GITHUB_OUTPUT"
+          echo "Cadencia semanal pede geracao? $SEMANA"
+          echo "IPCA com mes novo (${{ steps.ipca.outputs.ipca_atual }})? $IPCA"
           echo "Gerar boletim hoje? $RODAR"
 
   gerar-boletim:
@@ -139,8 +179,18 @@ jobs:
           cp "$HTML_FOUND" index.html
           cp "$PDF_FOUND" boletim_latest.pdf
 
+          # Registra o mes do IPCA que ESTE boletim incorporou. E o que impede
+          # o gatilho do IPCA de disparar de novo amanha pelo mesmo dado.
+          if python python/ipca_referencia.py --valor > referencia_ipca.txt.novo; then
+            mv referencia_ipca.txt.novo referencia_ipca.txt
+            echo "Referencia do IPCA registrada: $(cat referencia_ipca.txt)"
+          else
+            rm -f referencia_ipca.txt.novo
+            echo "::warning::Nao foi possivel registrar a referencia do IPCA. O gatilho pode disparar de novo na proxima janela; o portao semanal segue intacto."
+          fi
+
           git add logs/revisao.md logs/erros.md 2>/dev/null || true
-          git add index.html boletim_latest.pdf
+          git add index.html boletim_latest.pdf referencia_ipca.txt
 
           if git diff --staged --quiet; then
             echo "Nada a publicar nesta rodada."
