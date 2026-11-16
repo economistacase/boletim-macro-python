@@ -1,21 +1,17 @@
-falha_estilo
-- [estilo] linha 268: a defasagem aparece duas vezes na mesma frase ("Como o canal de demanda leva entre dois e quatro trimestres para operar" e, no fim, "dada a defasagem de dois a quatro trimestres"). Achado novo, introduzido pela correção da rodada 1; é redundância de redação, sem erro factual. Remova a oração final: "...a leitura de atividade de agosto reflete sobretudo as condições de juros anteriores ao início dos cortes em 19/03/2026."
+ok
 
-Verificação das 5 correções da rodada 1 (todas resolvidas):
-- Selic com data (linha 270): "Selic a 13,75% desde 17/09/2026". OK. Todas as demais citações do nível (linhas 40, 174, 268) também trazem "desde 17/09/2026".
-- Panorama (linha 38): a frase agora cita 0,14% vs. 0,82%, 4,58% para 4,63% e 3,56%, todos conferidos com o contexto.md. OK.
-- Título da Síntese (linha 264): "Inflação desacelera no mês, mas acumulado sobe e segue acima do teto". Coerente com o contexto.md (**desaceleração**, **alta**, **acima do teto**). OK.
-- Linha em branco na seção de Atividade (linha 225): presente. OK.
-- Defasagem dos cortes (linha 268): a ambiguidade foi resolvida. Restou apenas a redundância apontada acima.
+Rodada 2. As duas objeções da rodada 1 foram corrigidas e o documento foi reauditado por inteiro. Não há falhas.
 
-Itens conferidos sem falha no documento inteiro:
-- Fidelidade numérica: tabela lida do resumo.csv; todos os números da narrativa batem com resumo.csv, contexto.md e contexto_cambio.md.
-- Coerência direcional: nenhuma inversão. As palavras de direção coincidem com o negrito do contexto.md (desaceleração de 0,68 p.p., alta de 0,05 p.p., maior em 0,05 p.p., acima do teto, alta de 0,34%, 0,76% abaixo do máximo, "além"/"menos" no resíduo cambial).
-- Sinal duplo: nenhum.
-- Resíduo cambial: descrito como "não explicado pelo dólar global", sem "doméstico", "interno" ou "local". Números iguais aos do contexto_cambio.md (3,56%/1,18%/2,38 p.p.; 2,03%/5,01%/2,98 p.p.; 5,26%/3,76%/1,49 p.p.).
-- Selic: sem afirmação de trajetória atual ou futura; cortes passados citados como fatos datados, conforme o contexto.md. "Estável desde 17/09/2026" descreve duração, não direção.
-- Análise positiva: sem meta-comentário sobre os dados, sem expectativa atribuída a terceiros, sem evento externo. Defasagens apenas como faixas qualitativas e mecanismos teóricos.
-- Gráficos: conformes com a seção 6 de redator_relatorio.md (plot_bgcolor, fig.show(), linha de referência só na Selic, IBC-Br com duas séries, fontes em parágrafo HTML separado).
-- Tabela: nota do IBC-Br presente; fontes corretas (IBGE para o IPCA; BCB para Selic, Câmbio e IBC-Br).
-- Credenciais: author "Raimundo Casé", botão print-btn e rodapé com fontes BCB e IBGE presentes.
-- Tom: institucional.
+Correções verificadas:
+- Linha 195: a frase sobre as quedas de junho e julho agora diz que a de junho ocorreu no mês em que a Meta Selic passou de 14,50% para 14,25% (18/06/2026), e a de julho com a taxa em 14,25% desde 18/06/2026. Isso confere com a trajetória do contexto.md: o 14,25% vigorou de 18/06 a 05/08, e o 14,00% só começou em 06/08/2026. A associação de 14,00% a julho foi removida.
+- Linha 195: o nível de 13,75% aparece com a data de vigência ("desde 17/09/2026").
+
+Itens conferidos e sem objeção:
+- Tabela: os valores vêm direto do resumo.csv (IPCA 0.14, Câmbio 5.73, Selic 13.75, IBC-Br 109.78). A nota de rodapé do IBC-Br está presente. As fontes estão corretas (IBGE para o IPCA, BCB para os demais).
+- Coerência direcional: todas as comparações conferem com o contexto.md. São elas desaceleração de 0,68 p.p., maior em 0,05 p.p., alta de 4,58% para 4,63%, queda de 1,25 p.p. da Selic, queda de 0,25% e retração de 0,01% no IBC-Br, e 1,35% abaixo do máximo.
+- Fatos e números do IPCA, do câmbio, da Selic e do IBC-Br (séries mensais, máximos, mínimos, datas, fechamentos mensais, níveis de março e abril do IBC-Br) conferem com contexto.md e resumo.csv.
+- Decomposição cambial: números idênticos aos do contexto_cambio.md (1,59/4,15; 5,44/-1,26; 4,19/3,29). O resíduo é descrito como "não explicados pelo dólar global", sem rótulo doméstico.
+- Selic: não há afirmação de trajetória em curso ou futura. Os cortes aparecem como fatos datados. Todas as citações do nível trazem "desde 17/09/2026". "Juros estáveis desde setembro" é derivado da data de vigência.
+- Gráficos: seguem a especificação do redator_relatorio.md. Todos têm plot_bgcolor e fig.show(). A linha de referência existe só na Selic. Não há annotations. As fontes estão em parágrafos HTML separados.
+- Credenciais: author "Raimundo Casé", botão print-btn e rodapé com fontes BCB/IBGE presentes.
+- Sem meta-comentário sobre os dados, sem expectativa atribuída a terceiros, sem sinal duplo e sem adjetivos vetados. Os mecanismos de transmissão aparecem apenas como faixas qualitativas de defasagem.
